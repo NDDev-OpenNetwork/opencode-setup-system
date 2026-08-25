@@ -12,6 +12,8 @@
 
 use std::process::ExitCode;
 
+mod software;
+
 use harness_runtime::Harness;
 use provider_v3::{ComponentKind, ProjectionKind};
 
@@ -59,6 +61,7 @@ pub const OPENCODE: Harness = Harness {
     max_files: 8192,
     max_bytes: 64 * 1024 * 1024,
     kit_identity: include_str!("../../../provider-kit/v3/KIT-IDENTITY.json"),
+    software: Some(software::SOFTWARE),
 };
 
 fn main() -> ExitCode {
