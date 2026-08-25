@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "verified_version_ref": "build/version.json:opencode_version",
   "runtime": {
     "product": "OpenCode",
@@ -90,5 +90,49 @@
     "OPENCODE_DISABLE_CLAUDE_CODE",
     "OPENCODE_DISABLE_SHARE"
   ],
-  "verified_at": "2026-08-25T12:00:27+00:00"
+  "verified_at": "2026-08-25T13:06:34+00:00",
+  "software_artifacts": {
+    "command": "opencode",
+    "shape": "gzip-tar",
+    "platforms": {
+      "linux/arm64": {
+        "url": "https://registry.npmjs.org/opencode-linux-arm64/-/opencode-linux-arm64-1.18.23.tgz",
+        "bytes": 59944416,
+        "sha256": "sha256:ca35ecf5e33bab3e1d9e45b4387a07ed7804178c046b44d797306f2c82ba581e",
+        "member": "package/bin/opencode"
+      },
+      "linux/x86_64": {
+        "url": "https://registry.npmjs.org/opencode-linux-x64/-/opencode-linux-x64-1.18.23.tgz",
+        "bytes": 60167326,
+        "sha256": "sha256:b987ad440e278a8d543ec99cbac11a14fb3d19ae7254fecfe825dba1f133729e",
+        "member": "package/bin/opencode"
+      },
+      "macos/arm64": {
+        "url": "https://registry.npmjs.org/opencode-darwin-arm64/-/opencode-darwin-arm64-1.18.23.tgz",
+        "bytes": 45938603,
+        "sha256": "sha256:1415acecc9f520cf28459cef66f9487a9b173ad10b0ea093b8f5087401b0e125",
+        "member": "package/bin/opencode"
+      },
+      "macos/x86_64": {
+        "url": "https://registry.npmjs.org/opencode-darwin-x64/-/opencode-darwin-x64-1.18.23.tgz",
+        "bytes": 48114961,
+        "sha256": "sha256:d217059f954f34458ff1ee41b946d22ff0cb5d7d165d165dfa72bc4e65faac0a",
+        "member": "package/bin/opencode"
+      },
+      "windows/arm64": {
+        "url": "https://registry.npmjs.org/opencode-windows-arm64/-/opencode-windows-arm64-1.18.23.tgz",
+        "bytes": 58397371,
+        "sha256": "sha256:919de21beb75a2f93776a7550da5d964b0231545ba6e3ce84b19f565544b1e18",
+        "member": "package/bin/opencode.exe"
+      },
+      "windows/x86_64": {
+        "url": "https://registry.npmjs.org/opencode-windows-x64/-/opencode-windows-x64-1.18.23.tgz",
+        "bytes": 60078745,
+        "sha256": "sha256:28e4a6f4079f907b1fd198c7aeea6be96dcf7d6edc428cc7199a4cbe3e3ac6ed",
+        "member": "package/bin/opencode.exe"
+      }
+    },
+    "version": "1.18.23",
+    "verified_at": "2026-08-25T13:06:34+00:00"
+  }
 }
