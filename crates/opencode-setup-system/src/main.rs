@@ -31,6 +31,7 @@ pub const OPENCODE: Harness = Harness {
     config_home_env: "OPENCODE_CONFIG_DIR",
     control_directory: ".opencode-setup-system",
     state_file: "NDDEV-OPENCODE-PROVIDER.json",
+    predecessor_state_file: "NDDEV-OPENCODE-SETUP.json",
     profile_id: "opencode/native-files/1",
     // Everything outside this list is a sibling overlay preserved verbatim.
     // `opencode.json` carries both the settings and the MCP entries: the product
