@@ -90,7 +90,7 @@
     "OPENCODE_DISABLE_CLAUDE_CODE",
     "OPENCODE_DISABLE_SHARE"
   ],
-  "verified_at": "2026-08-25T13:06:34+00:00",
+  "verified_at": "2026-08-26T23:01:06+00:00",
   "software_artifacts": {
     "command": "opencode",
     "shape": "gzip-tar",
@@ -133,6 +133,6 @@
       }
     },
     "version": "1.18.23",
-    "verified_at": "2026-08-25T13:06:34+00:00"
+    "verified_at": "2026-08-26T23:01:06+00:00"
   }
 }
