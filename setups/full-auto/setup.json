@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "id": "full-auto",
+  "description": "Full auto: every tool is allowed, by the catch-all the product documents. This product documents no sandbox to turn off.",
+  "sources": [
+    "https://opencode.ai/docs/config",
+    "https://opencode.ai/docs/permissions"
+  ]
+}
