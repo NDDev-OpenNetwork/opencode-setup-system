@@ -1,5 +1,9 @@
 {
   "schema_version": 1,
   "id": "baseline",
-  "description": "A working floor: instructions plus a conservative permission posture."
+  "description": "A working floor: instructions plus a conservative permission posture.",
+  "sources": [
+    "https://opencode.ai/docs/config",
+    "https://opencode.ai/docs/permissions"
+  ]
 }

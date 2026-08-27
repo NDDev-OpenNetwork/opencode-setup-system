@@ -90,7 +90,82 @@
     "OPENCODE_DISABLE_CLAUDE_CODE",
     "OPENCODE_DISABLE_SHARE"
   ],
-  "verified_at": "2026-08-26T23:01:06+00:00",
+  "verified_at": "2026-08-27T15:02:43+00:00",
+  "native_surfaces": {
+    "verified_at": "2026-08-27",
+    "config_home": "~/.config/opencode",
+    "surfaces": [
+      {
+        "path": "AGENTS.md",
+        "kinds": [
+          "instruction"
+        ],
+        "shape": "file",
+        "source": "https://opencode.ai/docs/rules",
+        "note": "second in the search order, after a project's own"
+      },
+      {
+        "path": "opencode.json",
+        "kinds": [
+          "setting"
+        ],
+        "shape": "file",
+        "source": "https://opencode.ai/docs/config",
+        "note": "MCP servers live here under the mcp key; a key inside a file is not a projection surface, so mcp is not declared"
+      },
+      {
+        "path": "skills",
+        "kinds": [
+          "skill"
+        ],
+        "shape": "directory",
+        "source": "https://opencode.ai/docs/skills"
+      },
+      {
+        "path": "agents",
+        "kinds": [
+          "agent"
+        ],
+        "shape": "directory",
+        "source": "https://opencode.ai/docs/agents"
+      },
+      {
+        "path": "commands",
+        "kinds": [
+          "command"
+        ],
+        "shape": "directory",
+        "source": "https://opencode.ai/docs/commands"
+      },
+      {
+        "path": "plugins",
+        "kinds": [
+          "plugin"
+        ],
+        "shape": "directory",
+        "source": "https://opencode.ai/docs/plugins"
+      },
+      {
+        "path": "tui.json",
+        "kinds": [],
+        "shape": "file",
+        "source": "https://opencode.ai/docs/tui",
+        "note": "keybinds, theme, attention and sounds, deliberately separate from opencode.json, which the same documentation describes as server and runtime behaviour; the setting route stays opencode.json"
+      }
+    ],
+    "declined": [
+      {
+        "path": "opencode.jsonc",
+        "reason": "Documented, and deliberately not owned. OpenCode reads either spelling; owning both would let a target hold two documents that disagree, with the product picking one and this provider reporting the other. Owning one keeps the answer single, and a target configured the other way is preserved verbatim as any sibling overlay is.",
+        "source": "https://opencode.ai/docs/config"
+      },
+      {
+        "path": "tui.jsonc",
+        "reason": "Documented, and deliberately not owned, for the same reason as opencode.jsonc: it is the second spelling of one file, and owning both would let a target hold two documents that disagree with the product reading one and this provider reporting the other.",
+        "source": "https://opencode.ai/docs/tui"
+      }
+    ]
+  },
   "software_artifacts": {
     "command": "opencode",
     "shape": "gzip-tar",
@@ -133,6 +208,6 @@
       }
     },
     "version": "1.18.23",
-    "verified_at": "2026-08-26T23:01:06+00:00"
+    "verified_at": "2026-08-27T15:02:43+00:00"
   }
 }
