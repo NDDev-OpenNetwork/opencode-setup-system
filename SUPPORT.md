@@ -164,6 +164,12 @@ other file beside a target.
 
 **`tui.jsonc`** -- Documented, and deliberately not owned, for the same reason as opencode.jsonc: it is the second spelling of one file, and owning both would let a target hold two documents that disagree with the product reading one and this provider reporting the other. ([source](https://opencode.ai/docs/tui))
 
+**`NDDEV-OPENCODE-PROVIDER.json`** -- This provider's own state file: which setup is applied, the identity it recorded, and which slot reverses the last operation. Written by every operation and excluded from target identity, because counting it would leave a target different from the identity the operation just wrote. Not a projection surface and never ownable as one. ([source](this provider's own contract; no vendor page is involved))
+
+**`.opencode-setup-system`** -- This provider's own control directory: the target lock, the backup slots and their payloads. Kept out of the declaration for the same reason as the state file, and recorded here because the declined list is where a reader looks before opening a file to find out what it is. ([source](this provider's own contract; no vendor page is involved))
+
+**`.gitignore`** -- The product writes this into its configuration home on first run, listing `node_modules`, `package.json`, `package-lock.json`, `bun.lock` and itself -- it treats the home as a place a package manager might run. Measured 2026-08-28 by launching the product through this provider. Not owned: nothing here projects a `.gitignore`, and a file the product rewrites on its own schedule is not a surface a setup can promise to restore. ([source](measured through launch; no vendor page names it))
+
 ## Response
 
 One maintainer. Defects are triaged as time allows; security reports are
