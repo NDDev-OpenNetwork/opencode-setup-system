@@ -48,6 +48,9 @@ pub const OPENCODE: Harness = Harness {
     // The product's own: credentials and runtime caches. Never read, never
     // written, and never copied into a backup slot.
     never_touch: &["auth.json", "cache"],
+    // No near neighbour measured for this product. A marker listed here is a
+    // refusal waiting to happen, so nothing is listed without evidence.
+    foreign_homes: &[],
     permission_profiles: &["default"],
     component_kinds: &[
         ComponentKind::Instruction,
