@@ -57,4 +57,4 @@ jobs:
           suffix=""
           [ "$RUNNER_OS" = "Windows" ] && suffix=".exe"
           exe="target/release/opencode-setup-system$suffix"
-          "$py" scripts/evidence.py --binary "$exe" --harness opencode
+          "$py" scripts/evidence.py --binary "$exe" --harness opencode --writes-absent "it reads configuration from the target and writes the global `~/.config/opencode/opencode.json` regardless, so a write here would reach a real home rather than the target"
