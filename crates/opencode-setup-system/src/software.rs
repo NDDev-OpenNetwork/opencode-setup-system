@@ -6,14 +6,73 @@
 //! Every member path below was read out of the archive it names, not assumed:
 //! codex's carries the target triple and so genuinely differs per platform.
 //!
+//! Where a `previous_software_artifacts` block is present, it is transcribed
+//! too. It is not a second choice: `refresh_software_pins.py` puts the outgoing
+//! current pin there on a bump, so the pair is always two consecutive real
+//! releases and there is still exactly one value to keep fresh.
+//!
 //! Do not edit. The test at the bottom re-reads that baseline and compares it
 //! field by field, so an edit here fails rather than silently installing bytes
 //! nobody measured.
 
-use harness_runtime::{Artifact, Delivery, Shape, Software};
+use harness_runtime::{Artifact, Delivery, Previous, Shape, Software};
 
 /// The artifacts opencode is published as.
 pub(crate) const ARTIFACTS: &[Artifact] = &[
+    Artifact {
+        platform: "linux/arm64",
+        url: "https://registry.npmjs.org/opencode-linux-arm64/-/opencode-linux-arm64-1.18.25.tgz",
+        bytes: 59_965_131,
+        sha256: "sha256:2b14bd75252cbaec62abd5b3df43da01c4ae521a7e62a2f577af7ea0edd7c7a1",
+        shape: Shape::GzipTar,
+        member: "package/bin/opencode",
+    },
+    Artifact {
+        platform: "linux/x86_64",
+        url: "https://registry.npmjs.org/opencode-linux-x64/-/opencode-linux-x64-1.18.25.tgz",
+        bytes: 60_179_907,
+        sha256: "sha256:3e6d285607b6e9acd1f60ec350cc3954d7351d9dcad970ded390f7b733e34280",
+        shape: Shape::GzipTar,
+        member: "package/bin/opencode",
+    },
+    Artifact {
+        platform: "macos/arm64",
+        url: "https://registry.npmjs.org/opencode-darwin-arm64/-/opencode-darwin-arm64-1.18.25.tgz",
+        bytes: 45_945_992,
+        sha256: "sha256:5a2ba8cdd01e8d9d3b3658cc8aeec27e22c81414a885bbe05af5958b022581c2",
+        shape: Shape::GzipTar,
+        member: "package/bin/opencode",
+    },
+    Artifact {
+        platform: "macos/x86_64",
+        url: "https://registry.npmjs.org/opencode-darwin-x64/-/opencode-darwin-x64-1.18.25.tgz",
+        bytes: 48_128_085,
+        sha256: "sha256:f42ee1f37d6dce61501140357cadfc0c153224e1224dd0ef00fbb073ce538abb",
+        shape: Shape::GzipTar,
+        member: "package/bin/opencode",
+    },
+    Artifact {
+        platform: "windows/arm64",
+        url: "https://registry.npmjs.org/opencode-windows-arm64/-/opencode-windows-arm64-1.18.25.tgz",
+        bytes: 58_410_963,
+        sha256: "sha256:33a0d88c0fd16cf93eb6302c2eeefd70c84400bf33c50cc5456993eb43c5cc3a",
+        shape: Shape::GzipTar,
+        member: "package/bin/opencode.exe",
+    },
+    Artifact {
+        platform: "windows/x86_64",
+        url: "https://registry.npmjs.org/opencode-windows-x64/-/opencode-windows-x64-1.18.25.tgz",
+        bytes: 60_101_564,
+        sha256: "sha256:07bcd049b7f1c7ba7184ab97240fb9cd63332fdbfa1d53d84dfbde0f010f4796",
+        shape: Shape::GzipTar,
+        member: "package/bin/opencode.exe",
+    },
+];
+
+/// The artifacts 1.18.24 was published as, kept so
+/// `software_update` has a version to move from and `rollback` a tree to
+/// return to. Measured from bytes when it was the current pin.
+pub(crate) const PREVIOUS_ARTIFACTS: &[Artifact] = &[
     Artifact {
         platform: "linux/arm64",
         url: "https://registry.npmjs.org/opencode-linux-arm64/-/opencode-linux-arm64-1.18.24.tgz",
@@ -66,10 +125,14 @@ pub(crate) const ARTIFACTS: &[Artifact] = &[
 
 /// Opencode's program, and where its bytes come from.
 pub(crate) const SOFTWARE: Software = Software {
-    version: "1.18.24",
+    version: "1.18.25",
     command: "opencode",
     delivery: Delivery::Artifacts(ARTIFACTS),
     unsupported: &[],
+    previous: Some(Previous {
+        version: "1.18.24",
+        artifacts: PREVIOUS_ARTIFACTS,
+    }),
 };
 
 #[cfg(test)]
@@ -125,6 +188,45 @@ mod tests {
                 "{} disagrees about whether the bytes are the program",
                 artifact.platform
             );
+        }
+    }
+
+    /// The second pin is the baseline's, or it is absent in both places.
+    ///
+    /// Asserted from either side rather than only where it exists: a harness
+    /// that has never been bumped must compile in `None`, and a build that
+    /// dropped the block while the baseline still carried it would otherwise
+    /// pass by having nothing to compare.
+    #[test]
+    fn the_version_this_build_can_move_between_is_the_one_measured_before_it() {
+        let baseline = measured();
+        let recorded = baseline.get("previous_software_artifacts");
+        let Some(earlier) = SOFTWARE.previous else {
+            assert!(
+                recorded.is_none(),
+                "the baseline records a previous release and this build names none"
+            );
+            return;
+        };
+        let block = recorded.unwrap_or_else(|| {
+            panic!("this build names a previous release the baseline does not record")
+        });
+        assert_eq!(block["version"], earlier.version);
+        assert_ne!(
+            earlier.version, SOFTWARE.version,
+            "a second pin equal to the first is one version wearing two names"
+        );
+        let published = block["platforms"].as_object().unwrap();
+        assert_eq!(
+            earlier.artifacts.len(),
+            published.len(),
+            "the previous table and the baseline disagree on how many platforms exist"
+        );
+        for artifact in earlier.artifacts {
+            let entry = &published[artifact.platform];
+            assert_eq!(entry["url"], artifact.url, "{}", artifact.platform);
+            assert_eq!(entry["bytes"], artifact.bytes, "{}", artifact.platform);
+            assert_eq!(entry["sha256"], artifact.sha256, "{}", artifact.platform);
         }
     }
 

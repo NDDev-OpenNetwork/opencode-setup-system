@@ -8,9 +8,9 @@
     "minimum_version_ref": "build/version.json:opencode_min"
   },
   "release": {
-    "github_release": "https://github.com/anomalyco/opencode/releases/tag/v1.18.24",
-    "github_release_api": "https://api.github.com/repos/anomalyco/opencode/releases/tags/v1.18.24",
-    "tag": "v1.18.24",
+    "github_release": "https://github.com/anomalyco/opencode/releases/tag/v1.18.25",
+    "github_release_api": "https://api.github.com/repos/anomalyco/opencode/releases/tags/v1.18.25",
+    "tag": "v1.18.25",
     "cli_signature": null,
     "cli_signature_note": "Official CLI zip/tar assets expose GitHub release asset SHA-256 digests but no PGP/cosign signature was published for the CLI assets."
   },
@@ -90,7 +90,7 @@
     "OPENCODE_DISABLE_CLAUDE_CODE",
     "OPENCODE_DISABLE_SHARE"
   ],
-  "verified_at": "2026-08-28T04:45:01+00:00",
+  "verified_at": "2026-08-28T08:11:16+00:00",
   "native_surfaces": {
     "verified_at": "2026-08-27",
     "config_home": "~/.config/opencode",
@@ -188,12 +188,62 @@
         "path": "$HOME/.claude/skills",
         "reason": "OpenCode also reads Claude Code's skills directory for compatibility -- `.claude/skills/<name>/SKILL.md` is a path literal in the pinned binary, and the vendor lists it as *Global Claude-compatible*. Another product's home, never this provider's to own, and recorded because claude-setup-system owns `skills` there.",
         "source": "https://opencode.ai/docs/skills/ and measured from the pinned artifact, digest verified before reading (opencode 1.18.24)"
+      },
+      {
+        "path": "opencode-runtime-state",
+        "reason": "One row for what the product writes **outside its configuration home entirely**, because it writes to three other roots and none of them had a row.\n\nMeasured 2026-08-28 by running the pinned 1.18.25 binary in a clean `HOME` with every XDG variable cleared. A bare `--version` created:\n  * `~/.local/share/opencode/{log,repos}`\n  * `~/.local/state/opencode`\n  * `~/.cache/opencode/bin`\n\nThe product is XDG-native and this is the rest of that specification: the config home this provider targets is one of four roots it uses, not the only one. Confirmed at the line -- its `Global` module reads `XDG_DATA_HOME`, `XDG_CONFIG_HOME`, `XDG_STATE_HOME` and `XDG_CACHE_HOME`, each falling back to the conventional directory under the home, and joins `\"opencode\"` to all four.\n\n**None of them gets a row of its own**, because every recorded path here is relative to the target and these are relative to roots this provider never evaluates against; the guard that enforces it refuses such a row, correctly. Recorded in this sentence instead, the same way antigravity's `~/.cache/ms-playwright-go` is, so a reader looking for everything the product writes does not stop at `~/.config/opencode` and get a wrong answer.\n\n**And it settles a search result that says otherwise.** Several pages claim opencode uses `%APPDATA%` on Windows; they are about third-party plugins rather than the vendor. The product's own resolver has **no `win32` branch at all**, so `~/.config/opencode` is correct on all three systems and this baseline's `config_home` stands.",
+        "source": "measured by running the pinned 1.18.25 binary in a clean HOME, and confirmed at the line in its own Global module, 2026-08-28"
       }
     ],
     "config_home_env": "OPENCODE_CONFIG_DIR",
     "config_home_env_note": "Measured 2026-08-28, and the measurement is worth stating precisely because this baseline's own field names distinguish two variables that the declaration has one slot for. `opencode debug config` under this variable resolved a `model` value present in no file but the target's `opencode.json`, so the product **reads** its configuration here. It does not **write** here: `mcp add` writes the global `~/.config/opencode/opencode.json` whatever this variable says. Reading is what a setup needs and what `launch` is for; the asymmetry is why this product is not an evidence case for a product-written round trip, and why driving its own config commands through `launch` reaches a person's real home."
   },
   "software_artifacts": {
+    "command": "opencode",
+    "shape": "gzip-tar",
+    "platforms": {
+      "linux/arm64": {
+        "url": "https://registry.npmjs.org/opencode-linux-arm64/-/opencode-linux-arm64-1.18.25.tgz",
+        "bytes": 59965131,
+        "sha256": "sha256:2b14bd75252cbaec62abd5b3df43da01c4ae521a7e62a2f577af7ea0edd7c7a1",
+        "member": "package/bin/opencode"
+      },
+      "linux/x86_64": {
+        "url": "https://registry.npmjs.org/opencode-linux-x64/-/opencode-linux-x64-1.18.25.tgz",
+        "bytes": 60179907,
+        "sha256": "sha256:3e6d285607b6e9acd1f60ec350cc3954d7351d9dcad970ded390f7b733e34280",
+        "member": "package/bin/opencode"
+      },
+      "macos/arm64": {
+        "url": "https://registry.npmjs.org/opencode-darwin-arm64/-/opencode-darwin-arm64-1.18.25.tgz",
+        "bytes": 45945992,
+        "sha256": "sha256:5a2ba8cdd01e8d9d3b3658cc8aeec27e22c81414a885bbe05af5958b022581c2",
+        "member": "package/bin/opencode"
+      },
+      "macos/x86_64": {
+        "url": "https://registry.npmjs.org/opencode-darwin-x64/-/opencode-darwin-x64-1.18.25.tgz",
+        "bytes": 48128085,
+        "sha256": "sha256:f42ee1f37d6dce61501140357cadfc0c153224e1224dd0ef00fbb073ce538abb",
+        "member": "package/bin/opencode"
+      },
+      "windows/arm64": {
+        "url": "https://registry.npmjs.org/opencode-windows-arm64/-/opencode-windows-arm64-1.18.25.tgz",
+        "bytes": 58410963,
+        "sha256": "sha256:33a0d88c0fd16cf93eb6302c2eeefd70c84400bf33c50cc5456993eb43c5cc3a",
+        "member": "package/bin/opencode.exe"
+      },
+      "windows/x86_64": {
+        "url": "https://registry.npmjs.org/opencode-windows-x64/-/opencode-windows-x64-1.18.25.tgz",
+        "bytes": 60101564,
+        "sha256": "sha256:07bcd049b7f1c7ba7184ab97240fb9cd63332fdbfa1d53d84dfbde0f010f4796",
+        "member": "package/bin/opencode.exe"
+      }
+    },
+    "version": "1.18.25",
+    "verified_at": "2026-08-28T08:11:16+00:00"
+  },
+  "setup_catalogue_digest": "sha256:bdeee6be090bb67daca9e15d2708fa54d37204522a04cf70cbc392c865c401ad",
+  "previous_software_artifacts": {
     "command": "opencode",
     "shape": "gzip-tar",
     "platforms": {
@@ -236,6 +286,5 @@
     },
     "version": "1.18.24",
     "verified_at": "2026-08-28T04:45:01+00:00"
-  },
-  "setup_catalogue_digest": "sha256:bdeee6be090bb67daca9e15d2708fa54d37204522a04cf70cbc392c865c401ad"
+  }
 }
