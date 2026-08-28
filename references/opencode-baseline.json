@@ -102,6 +102,7 @@
         ],
         "shape": "file",
         "source": "https://opencode.ai/docs/rules",
+        "evidence": "page",
         "note": "second in the search order, after a project's own"
       },
       {
@@ -111,6 +112,7 @@
         ],
         "shape": "file",
         "source": "https://opencode.ai/docs/config",
+        "evidence": "page",
         "note": "MCP servers live here under the mcp key; a key inside a file is not a projection surface, so mcp is not declared"
       },
       {
@@ -119,7 +121,9 @@
           "skill"
         ],
         "shape": "directory",
-        "source": "https://opencode.ai/docs/skills"
+        "source": "https://opencode.ai/docs/skills; routing exercised against the pinned product",
+        "evidence": "ran",
+        "note": "Exercised 2026-08-28 by running the product against a temporary OPENCODE_CONFIG_DIR with a marker component in this directory: `opencode debug skill` reports the skill with its location, and `opencode debug config` resolves the agent and the command by name."
       },
       {
         "path": "agents",
@@ -127,7 +131,9 @@
           "agent"
         ],
         "shape": "directory",
-        "source": "https://opencode.ai/docs/agents"
+        "source": "https://opencode.ai/docs/agents; routing exercised against the pinned product",
+        "evidence": "ran",
+        "note": "Exercised 2026-08-28 by running the product against a temporary OPENCODE_CONFIG_DIR with a marker component in this directory: `opencode debug skill` reports the skill with its location, and `opencode debug config` resolves the agent and the command by name."
       },
       {
         "path": "commands",
@@ -135,7 +141,9 @@
           "command"
         ],
         "shape": "directory",
-        "source": "https://opencode.ai/docs/commands"
+        "source": "https://opencode.ai/docs/commands; routing exercised against the pinned product",
+        "evidence": "ran",
+        "note": "Exercised 2026-08-28 by running the product against a temporary OPENCODE_CONFIG_DIR with a marker component in this directory: `opencode debug skill` reports the skill with its location, and `opencode debug config` resolves the agent and the command by name."
       },
       {
         "path": "plugins",
@@ -143,13 +151,15 @@
           "plugin"
         ],
         "shape": "directory",
-        "source": "https://opencode.ai/docs/plugins"
+        "source": "https://opencode.ai/docs/plugins",
+        "evidence": "page"
       },
       {
         "path": "tui.json",
         "kinds": [],
         "shape": "file",
         "source": "https://opencode.ai/docs/tui",
+        "evidence": "page",
         "note": "keybinds, theme, attention and sounds, deliberately separate from opencode.json, which the same documentation describes as server and runtime behaviour; the setting route stays opencode.json"
       }
     ],
@@ -270,7 +280,7 @@
     "version": "1.18.25",
     "verified_at": "2026-08-28T08:11:16+00:00"
   },
-  "setup_catalogue_digest": "sha256:4c2bd3e7d2047b6ba156773317dfa78fc2bc3267adab549bd66714bc3c41c8d9",
+  "setup_catalogue_digest": "sha256:ae2cd5d195757bde04500473e1dfebfe55fa608255b62e70979a301335da91a3",
   "previous_software_artifacts": {
     "command": "opencode",
     "shape": "gzip-tar",

@@ -162,9 +162,9 @@ Configuration home as the product documents it: `~/.config/opencode`.
 | --- | --- | --- |
 | `AGENTS.md` | `instruction` | [source](https://opencode.ai/docs/rules) |
 | `opencode.json` | `setting` | [source](https://opencode.ai/docs/config) |
-| `skills` | `skill` | [source](https://opencode.ai/docs/skills) |
-| `agents` | `agent` | [source](https://opencode.ai/docs/agents) |
-| `commands` | `command` | [source](https://opencode.ai/docs/commands) |
+| `skills` | `skill` | [source](https://opencode.ai/docs/skills; routing exercised against the pinned product) |
+| `agents` | `agent` | [source](https://opencode.ai/docs/agents; routing exercised against the pinned product) |
+| `commands` | `command` | [source](https://opencode.ai/docs/commands; routing exercised against the pinned product) |
 | `plugins` | `plugin` | [source](https://opencode.ai/docs/plugins) |
 | `tui.json` | -- | [source](https://opencode.ai/docs/tui) |
 
