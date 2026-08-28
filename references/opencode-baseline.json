@@ -90,7 +90,7 @@
     "OPENCODE_DISABLE_CLAUDE_CODE",
     "OPENCODE_DISABLE_SHARE"
   ],
-  "verified_at": "2026-08-27T15:02:43+00:00",
+  "verified_at": "2026-08-27T23:47:44+00:00",
   "native_surfaces": {
     "verified_at": "2026-08-27",
     "config_home": "~/.config/opencode",
@@ -225,6 +225,6 @@
       }
     },
     "version": "1.18.23",
-    "verified_at": "2026-08-27T15:02:43+00:00"
+    "verified_at": "2026-08-27T23:47:44+00:00"
   }
 }
