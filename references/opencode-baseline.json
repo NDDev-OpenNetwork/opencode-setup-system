@@ -23,10 +23,11 @@
       "macos-arm64",
       "macos-x64",
       "ubuntu-glibc-arm64",
-      "ubuntu-glibc-x64"
+      "ubuntu-glibc-x64",
+      "windows-arm64",
+      "windows-x64"
     ],
     "unsupported": [
-      "windows",
       "non-ubuntu-linux",
       "linux-musl",
       "unsupported-architecture"
@@ -34,7 +35,9 @@
     "linux_distribution_metadata": "platform.freedesktop_os_release",
     "ubuntu_glibc_version_floor": null,
     "ubuntu_glibc_version_floor_note": "no-official-floor",
-    "linux_vendor_artifact_names": "The upstream CLI release assets retain vendor names such as linux-x64 and linux-x64-baseline; nddev-opencode-app maps the glibc Linux artifacts only after the host is verified as ID=ubuntu and glibc."
+    "linux_vendor_artifact_names": "The upstream CLI release assets retain vendor names such as linux-x64 and linux-x64-baseline; nddev-opencode-app maps the glibc Linux artifacts only after the host is verified as ID=ubuntu and glibc.",
+    "windows_note": "The vendor publishes `opencode-windows-x64` and `opencode-windows-arm64` and its own `opencode-ai` package declares `os: [darwin, linux, win32]`. Read from the npm registry on 2026-08-29, not from a page -- a third-party guide asserted that no windows-arm64 binary exists, and the registry has one at the same version as every other host.",
+    "coverage_note": "Platform coverage is decided by `software_artifacts` and nothing else. This block held `windows` under unsupported until 2026-08-29, inherited from the retired nddev-*-app line, and by then it was false: the vendor ships Windows and this provider installs it. It said so for as long as it did because nothing in this repository read the block -- see `tools/transcribe_software.py --check`, which now compares it against the artifact table so the two cannot disagree again."
   },
   "official_sources": {
     "repository": "https://github.com/anomalyco/opencode",
