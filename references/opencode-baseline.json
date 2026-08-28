@@ -196,7 +196,15 @@
       }
     ],
     "config_home_env": "OPENCODE_CONFIG_DIR",
-    "config_home_env_note": "Measured 2026-08-28, and the measurement is worth stating precisely because this baseline's own field names distinguish two variables that the declaration has one slot for. `opencode debug config` under this variable resolved a `model` value present in no file but the target's `opencode.json`, so the product **reads** its configuration here. It does not **write** here: `mcp add` writes the global `~/.config/opencode/opencode.json` whatever this variable says. Reading is what a setup needs and what `launch` is for; the asymmetry is why this product is not an evidence case for a product-written round trip, and why driving its own config commands through `launch` reaches a person's real home."
+    "config_home_env_note": "Measured 2026-08-28, and the measurement is worth stating precisely because this baseline's own field names distinguish two variables that the declaration has one slot for. `opencode debug config` under this variable resolved a `model` value present in no file but the target's `opencode.json`, so the product **reads** its configuration here. It does not **write** here: `mcp add` writes the global `~/.config/opencode/opencode.json` whatever this variable says. Reading is what a setup needs and what `launch` is for; the asymmetry is why this product is not an evidence case for a product-written round trip, and why driving its own config commands through `launch` reaches a person's real home.",
+    "configuration_format": {
+      "file": "opencode.json",
+      "grammar": "jsonc",
+      "accepts_comments": true,
+      "note": "**JSONC**, at both spellings -- line comments, block comments and trailing commas are all accepted, and the product's own bundle uses a `jsonc-parser` with `formattingOptions`. Strict JSON is a subset, so what this repository writes is valid; the distinction matters for a file a *person* has edited, which a backup will capture with its comments intact.",
+      "measured_at": "2026-08-28",
+      "schema": "https://opencode.ai/config.json"
+    }
   },
   "software_artifacts": {
     "command": "opencode",
