@@ -111,9 +111,9 @@
           "setting"
         ],
         "shape": "file",
-        "source": "https://opencode.ai/docs/config",
-        "evidence": "page",
-        "note": "MCP servers live here under the mcp key; a key inside a file is not a projection surface, so mcp is not declared"
+        "source": "https://opencode.ai/docs/config; route measured by running `debug config` against a temporary home",
+        "evidence": "ran",
+        "note": "MCP servers live here under the mcp key; a key inside a file is not a projection surface, so mcp is not declared. The route was confirmed 2026-08-29 by running the pinned 1.18.25 bundle against a temporary configuration home: a file written at <home>/opencode/opencode.json came back from `debug config`, and an invented key placed in the same file did not -- which is what separates a key the build reads from one it drops in silence, and is the control the run needed to prove anything."
       },
       {
         "path": "skills",
@@ -226,7 +226,7 @@
       },
       {
         "path": "managed-config",
-        "reason": "Not a path in the target, and named without an extension for that reason: the managed configuration directory is a **system** path, one per operating system, and every recorded path here is relative to the target.\n\n  * Linux — `/etc/opencode/`\n  * macOS — `/Library/Application Support/opencode/`\n  * Windows — `%ProgramData%\\\\opencode`\n\nAll three are in the pinned 1.18.25 bundle's own emitted source, in one switch: `case\"darwin\": return \"/Library/Application Support/opencode\"; case\"win32\": return join(process.env.ProgramData||\"C:\\\\ProgramData\",\"opencode\"); default: return \"/etc/opencode\"`. macOS additionally reads a managed plist from the `ai.opencode.managed` preference domain, deployable by MDM, which the same bundle carries as `parseManagedPlist` and `managedPreferences`.\n\n**It bears on the `full-auto` posture**, the same way the managed policy does on the harness next door. An administrator's `opencode.json` there is loaded at the highest priority tier and overrides everything, so this provider can install, verify and restore a permissive posture cleanly on a managed machine and change nothing about what the product actually permits. The setup is not wrong and the target is not wrong; a higher layer wins.\n\nRecorded and never touched: it needs root or Administrator to write, it is not under the configuration home this provider is given, and a provider that edited an organisation's policy would be doing the one thing this estate refuses everywhere else.\n\nThe user configuration home is **not** per-OS, which is why only this row is. The same bundle resolves it as `XDG_CONFIG_HOME || ~/.config` joined with the application name, with no platform branch at all.",
+        "reason": "Not a path in the target, and named without an extension for that reason: the managed configuration directory is a **system** path, one per operating system, and every recorded path here is relative to the target.\n\n  * Linux \u2014 `/etc/opencode/`\n  * macOS \u2014 `/Library/Application Support/opencode/`\n  * Windows \u2014 `%ProgramData%\\\\opencode`\n\nAll three are in the pinned 1.18.25 bundle's own emitted source, in one switch: `case\"darwin\": return \"/Library/Application Support/opencode\"; case\"win32\": return join(process.env.ProgramData||\"C:\\\\ProgramData\",\"opencode\"); default: return \"/etc/opencode\"`. macOS additionally reads a managed plist from the `ai.opencode.managed` preference domain, deployable by MDM, which the same bundle carries as `parseManagedPlist` and `managedPreferences`.\n\n**It bears on the `full-auto` posture**, the same way the managed policy does on the harness next door. An administrator's `opencode.json` there is loaded at the highest priority tier and overrides everything, so this provider can install, verify and restore a permissive posture cleanly on a managed machine and change nothing about what the product actually permits. The setup is not wrong and the target is not wrong; a higher layer wins.\n\nRecorded and never touched: it needs root or Administrator to write, it is not under the configuration home this provider is given, and a provider that edited an organisation's policy would be doing the one thing this estate refuses everywhere else.\n\nThe user configuration home is **not** per-OS, which is why only this row is. The same bundle resolves it as `XDG_CONFIG_HOME || ~/.config` joined with the application name, with no platform branch at all.",
         "source": "https://opencode.ai/docs/config; measured in the pinned 1.18.25 bundle, whose bytes match this baseline's own sha256"
       }
     ],
@@ -285,7 +285,7 @@
     "version": "1.18.25",
     "verified_at": "2026-08-28T08:11:16+00:00"
   },
-  "setup_catalogue_digest": "sha256:4d6f9ecb727566cf27b79a2cbd6339b76f644f2dabdce5b67561034235796450",
+  "setup_catalogue_digest": "sha256:9044ce3a2128e13b585016e65200af77ac4be69884ece1f9765faa619e88e2c8",
   "previous_software_artifacts": {
     "command": "opencode",
     "shape": "gzip-tar",

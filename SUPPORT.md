@@ -161,7 +161,7 @@ Configuration home as the product documents it: `~/.config/opencode`.
 | Path | Component kinds routed here | Decided by |
 | --- | --- | --- |
 | `AGENTS.md` | `instruction` | [source](https://opencode.ai/docs/rules) |
-| `opencode.json` | `setting` | [source](https://opencode.ai/docs/config) |
+| `opencode.json` | `setting` | [source](https://opencode.ai/docs/config; route measured by running `debug config` against a temporary home) |
 | `skills` | `skill` | [source](https://opencode.ai/docs/skills; routing exercised against the pinned product) |
 | `agents` | `agent` | [source](https://opencode.ai/docs/agents; routing exercised against the pinned product) |
 | `commands` | `command` | [source](https://opencode.ai/docs/commands; routing exercised against the pinned product) |
