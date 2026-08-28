@@ -186,6 +186,10 @@ other file beside a target.
 
 **`.gitignore`** -- The product writes this into its configuration home on first run, listing `node_modules`, `package.json`, `package-lock.json`, `bun.lock` and itself -- it treats the home as a place a package manager might run. Measured 2026-08-28 by launching the product through this provider. Not owned: nothing here projects a `.gitignore`, and a file the product rewrites on its own schedule is not a surface a setup can promise to restore. ([source](measured through launch; no vendor page names it))
 
+**`$HOME/.agents/skills`** -- OpenCode reads the user-level convention root. The vendor lists it as *Global agent-compatible: ~/.agents/skills/<name>/SKILL.md*, and the pinned 1.18.24 binary carries `.agents/skills/<name>/SKILL.md` as a path literal. Not owned, for the reason Codex's declaration gives: the root belongs to the convention, a namespace is removed whole, and two providers declaring one path are not two owners. ([source](https://opencode.ai/docs/skills/ and measured from the pinned artifact, digest verified before reading (opencode 1.18.24)))
+
+**`$HOME/.claude/skills`** -- OpenCode also reads Claude Code's skills directory for compatibility -- `.claude/skills/<name>/SKILL.md` is a path literal in the pinned binary, and the vendor lists it as *Global Claude-compatible*. Another product's home, never this provider's to own, and recorded because claude-setup-system owns `skills` there. ([source](https://opencode.ai/docs/skills/ and measured from the pinned artifact, digest verified before reading (opencode 1.18.24)))
+
 ## Response
 
 One maintainer. Defects are triaged as time allows; security reports are
