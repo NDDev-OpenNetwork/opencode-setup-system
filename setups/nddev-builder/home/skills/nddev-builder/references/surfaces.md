@@ -20,15 +20,19 @@ The vendor publishes a schema at <https://opencode.ai/config.json>, and `tools/v
 
 ## Owned surfaces
 
-| path | kinds | shape | decided by |
-|---|---|---|---|
-| `AGENTS.md` | instruction | file | <https://opencode.ai/docs/rules> |
-| `opencode.json` | setting | file | <https://opencode.ai/docs/config> |
-| `skills` | skill | directory | <https://opencode.ai/docs/skills> |
-| `agents` | agent | directory | <https://opencode.ai/docs/agents> |
-| `commands` | command | directory | <https://opencode.ai/docs/commands> |
-| `plugins` | plugin | directory | <https://opencode.ai/docs/plugins> |
-| `tui.json` | *(routes no kind)* | file | <https://opencode.ai/docs/tui> |
+| path | kinds | shape | decided by | exercised by |
+|---|---|---|---|---|
+| `AGENTS.md` | instruction | file | <https://opencode.ai/docs/rules> | *nothing — a page* |
+| `opencode.json` | setting | file | <https://opencode.ai/docs/config> | *nothing — a page* |
+| `skills` | skill | directory | <https://opencode.ai/docs/skills> | **ran it** |
+| `agents` | agent | directory | <https://opencode.ai/docs/agents> | **ran it** |
+| `commands` | command | directory | <https://opencode.ai/docs/commands> | **ran it** |
+| `plugins` | plugin | directory | <https://opencode.ai/docs/plugins> | *nothing — a page* |
+| `tui.json` | *(routes no kind)* | file | <https://opencode.ai/docs/tui> | *nothing — a page* |
+
+**A citation is not a measurement.** `decided by` says where a row came from; `exercised by` says whether anybody made the product demonstrate it. Where a row records no method the answer is a page and nothing else, because absence of a record of measurement is not evidence of measurement.
+
+Here that is **3 run**, **0 read from the product's own bytes**, and **4 resting on a page alone**. The last number is the one worth acting on: a row in it is not wrong, it is untested, and the two are indistinguishable from here.
 
 A surface that routes no kind is owned deliberately: a backup captures
 it and a restore returns it, and no component is routed there because
