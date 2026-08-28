@@ -211,6 +211,20 @@ The product is XDG-native and this is the rest of that specification: the config
 
 **`plugin`** -- Opencode accepts the singular and the plural spelling of this directory. Its own embedded reference, carried in the pinned 1.18.25 binary, writes the global row as `~/.config/opencode/plugin(s)/<name>/` and the project row as `.opencode/plugin/<name>/` or `.opencode/plugins/<name>/`. This provider writes and owns the plural only. Owning both would let one target hold two definitions of the same component that disagree, with the product reading one and this provider reporting the other, and which of the two wins where both exist is not documented -- so a target holding the singular is reported rather than resolved. Recorded here because without a row the next reader repeats the search, and because a directory the product reads and this provider does not own is exactly what this block is for. ([source](measured in the pinned 1.18.25 bundle, whose bytes match this baseline's own sha256 -- the product carries its own reference table and it names both spellings))
 
+**`managed-config`** -- Not a path in the target, and named without an extension for that reason: the managed configuration directory is a **system** path, one per operating system, and every recorded path here is relative to the target.
+
+  * Linux — `/etc/opencode/`
+  * macOS — `/Library/Application Support/opencode/`
+  * Windows — `%ProgramData%\\opencode`
+
+All three are in the pinned 1.18.25 bundle's own emitted source, in one switch: `case"darwin": return "/Library/Application Support/opencode"; case"win32": return join(process.env.ProgramData||"C:\\ProgramData","opencode"); default: return "/etc/opencode"`. macOS additionally reads a managed plist from the `ai.opencode.managed` preference domain, deployable by MDM, which the same bundle carries as `parseManagedPlist` and `managedPreferences`.
+
+**It bears on the `full-auto` posture**, the same way the managed policy does on the harness next door. An administrator's `opencode.json` there is loaded at the highest priority tier and overrides everything, so this provider can install, verify and restore a permissive posture cleanly on a managed machine and change nothing about what the product actually permits. The setup is not wrong and the target is not wrong; a higher layer wins.
+
+Recorded and never touched: it needs root or Administrator to write, it is not under the configuration home this provider is given, and a provider that edited an organisation's policy would be doing the one thing this estate refuses everywhere else.
+
+The user configuration home is **not** per-OS, which is why only this row is. The same bundle resolves it as `XDG_CONFIG_HOME || ~/.config` joined with the application name, with no platform branch at all. ([source](https://opencode.ai/docs/config; measured in the pinned 1.18.25 bundle, whose bytes match this baseline's own sha256))
+
 ## Response
 
 One maintainer. Defects are triaged as time allows; security reports are
