@@ -29,6 +29,8 @@ pub const OPENCODE: Harness = Harness {
     // ever inferred from either, because every command takes an explicit target.
     documented_config_home: "~/.config/opencode",
     config_home_env: "OPENCODE_CONFIG_DIR",
+    // One home, one variable: nothing here is conditional.
+    config_home_note: "",
     control_directory: ".opencode-setup-system",
     state_file: "NDDEV-OPENCODE-PROVIDER.json",
     predecessor_state_file: "NDDEV-OPENCODE-SETUP.json",

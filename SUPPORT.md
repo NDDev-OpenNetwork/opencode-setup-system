@@ -190,6 +190,19 @@ other file beside a target.
 
 **`$HOME/.claude/skills`** -- OpenCode also reads Claude Code's skills directory for compatibility -- `.claude/skills/<name>/SKILL.md` is a path literal in the pinned binary, and the vendor lists it as *Global Claude-compatible*. Another product's home, never this provider's to own, and recorded because claude-setup-system owns `skills` there. ([source](https://opencode.ai/docs/skills/ and measured from the pinned artifact, digest verified before reading (opencode 1.18.24)))
 
+**`opencode-runtime-state`** -- One row for what the product writes **outside its configuration home entirely**, because it writes to three other roots and none of them had a row.
+
+Measured 2026-08-28 by running the pinned 1.18.25 binary in a clean `HOME` with every XDG variable cleared. A bare `--version` created:
+  * `~/.local/share/opencode/{log,repos}`
+  * `~/.local/state/opencode`
+  * `~/.cache/opencode/bin`
+
+The product is XDG-native and this is the rest of that specification: the config home this provider targets is one of four roots it uses, not the only one. Confirmed at the line -- its `Global` module reads `XDG_DATA_HOME`, `XDG_CONFIG_HOME`, `XDG_STATE_HOME` and `XDG_CACHE_HOME`, each falling back to the conventional directory under the home, and joins `"opencode"` to all four.
+
+**None of them gets a row of its own**, because every recorded path here is relative to the target and these are relative to roots this provider never evaluates against; the guard that enforces it refuses such a row, correctly. Recorded in this sentence instead, the same way antigravity's `~/.cache/ms-playwright-go` is, so a reader looking for everything the product writes does not stop at `~/.config/opencode` and get a wrong answer.
+
+**And it settles a search result that says otherwise.** Several pages claim opencode uses `%APPDATA%` on Windows; they are about third-party plugins rather than the vendor. The product's own resolver has **no `win32` branch at all**, so `~/.config/opencode` is correct on all three systems and this baseline's `config_home` stands. ([source](measured by running the pinned 1.18.25 binary in a clean HOME, and confirmed at the line in its own Global module, 2026-08-28))
+
 ## Response
 
 One maintainer. Defects are triaged as time allows; security reports are
