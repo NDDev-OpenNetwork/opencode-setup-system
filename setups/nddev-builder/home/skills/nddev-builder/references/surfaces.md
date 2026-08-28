@@ -20,15 +20,15 @@ The vendor publishes a schema at <https://opencode.ai/config.json>, and `tools/v
 
 ## Owned surfaces
 
-| path | kinds | shape |
-|---|---|---|
-| `AGENTS.md` | instruction | file |
-| `opencode.json` | setting | file |
-| `skills` | skill | directory |
-| `agents` | agent | directory |
-| `commands` | command | directory |
-| `plugins` | plugin | directory |
-| `tui.json` | *(routes no kind)* | file |
+| path | kinds | shape | decided by |
+|---|---|---|---|
+| `AGENTS.md` | instruction | file | <https://opencode.ai/docs/rules> |
+| `opencode.json` | setting | file | <https://opencode.ai/docs/config> |
+| `skills` | skill | directory | <https://opencode.ai/docs/skills> |
+| `agents` | agent | directory | <https://opencode.ai/docs/agents> |
+| `commands` | command | directory | <https://opencode.ai/docs/commands> |
+| `plugins` | plugin | directory | <https://opencode.ai/docs/plugins> |
+| `tui.json` | *(routes no kind)* | file | <https://opencode.ai/docs/tui> |
 
 A surface that routes no kind is owned deliberately: a backup captures
 it and a restore returns it, and no component is routed there because

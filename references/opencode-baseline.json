@@ -250,7 +250,7 @@
     "version": "1.18.25",
     "verified_at": "2026-08-28T08:11:16+00:00"
   },
-  "setup_catalogue_digest": "sha256:f7858a7b24d17befeb3c59dce04e77cd899c22fb452450ba55c5f419b68de349",
+  "setup_catalogue_digest": "sha256:0e3d92b2dc1d3b34cfe8a3142c88878f1f8cf0b9d208a3caf3e8ca603439e4b5",
   "previous_software_artifacts": {
     "command": "opencode",
     "shape": "gzip-tar",
