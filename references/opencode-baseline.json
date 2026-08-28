@@ -193,6 +193,26 @@
         "path": "opencode-runtime-state",
         "reason": "One row for what the product writes **outside its configuration home entirely**, because it writes to three other roots and none of them had a row.\n\nMeasured 2026-08-28 by running the pinned 1.18.25 binary in a clean `HOME` with every XDG variable cleared. A bare `--version` created:\n  * `~/.local/share/opencode/{log,repos}`\n  * `~/.local/state/opencode`\n  * `~/.cache/opencode/bin`\n\nThe product is XDG-native and this is the rest of that specification: the config home this provider targets is one of four roots it uses, not the only one. Confirmed at the line -- its `Global` module reads `XDG_DATA_HOME`, `XDG_CONFIG_HOME`, `XDG_STATE_HOME` and `XDG_CACHE_HOME`, each falling back to the conventional directory under the home, and joins `\"opencode\"` to all four.\n\n**None of them gets a row of its own**, because every recorded path here is relative to the target and these are relative to roots this provider never evaluates against; the guard that enforces it refuses such a row, correctly. Recorded in this sentence instead, the same way antigravity's `~/.cache/ms-playwright-go` is, so a reader looking for everything the product writes does not stop at `~/.config/opencode` and get a wrong answer.\n\n**And it settles a search result that says otherwise.** Several pages claim opencode uses `%APPDATA%` on Windows; they are about third-party plugins rather than the vendor. The product's own resolver has **no `win32` branch at all**, so `~/.config/opencode` is correct on all three systems and this baseline's `config_home` stands.",
         "source": "measured by running the pinned 1.18.25 binary in a clean HOME, and confirmed at the line in its own Global module, 2026-08-28"
+      },
+      {
+        "path": "agent",
+        "reason": "Opencode accepts the singular and the plural spelling of this directory. Its own embedded reference, carried in the pinned 1.18.25 binary, writes the global row as `~/.config/opencode/agent(s)/<name>.md` and the project row as `.opencode/agent/<name>.md` or `.opencode/agents/<name>.md`. This provider writes and owns the plural only. Owning both would let one target hold two definitions of the same component that disagree, with the product reading one and this provider reporting the other, and which of the two wins where both exist is not documented -- so a target holding the singular is reported rather than resolved. Recorded here because without a row the next reader repeats the search, and because a directory the product reads and this provider does not own is exactly what this block is for.",
+        "source": "measured in the pinned 1.18.25 bundle, whose bytes match this baseline's own sha256 -- the product carries its own reference table and it names both spellings"
+      },
+      {
+        "path": "command",
+        "reason": "Opencode accepts the singular and the plural spelling of this directory. Its own embedded reference, carried in the pinned 1.18.25 binary, writes the global row as `~/.config/opencode/command(s)/<name>.md` and the project row as `.opencode/command/<name>.md` or `.opencode/commands/<name>.md`. This provider writes and owns the plural only. Owning both would let one target hold two definitions of the same component that disagree, with the product reading one and this provider reporting the other, and which of the two wins where both exist is not documented -- so a target holding the singular is reported rather than resolved. Recorded here because without a row the next reader repeats the search, and because a directory the product reads and this provider does not own is exactly what this block is for.",
+        "source": "measured in the pinned 1.18.25 bundle, whose bytes match this baseline's own sha256 -- the product carries its own reference table and it names both spellings"
+      },
+      {
+        "path": "skill",
+        "reason": "Opencode accepts the singular and the plural spelling of this directory. Its own embedded reference, carried in the pinned 1.18.25 binary, writes the global row as `~/.config/opencode/skill(s)/<name>/SKILL.md` and the project row as `.opencode/skill/<name>/SKILL.md` or `.opencode/skills/<name>/SKILL.md`. This provider writes and owns the plural only. Owning both would let one target hold two definitions of the same component that disagree, with the product reading one and this provider reporting the other, and which of the two wins where both exist is not documented -- so a target holding the singular is reported rather than resolved. Recorded here because without a row the next reader repeats the search, and because a directory the product reads and this provider does not own is exactly what this block is for.",
+        "source": "measured in the pinned 1.18.25 bundle, whose bytes match this baseline's own sha256 -- the product carries its own reference table and it names both spellings"
+      },
+      {
+        "path": "plugin",
+        "reason": "Opencode accepts the singular and the plural spelling of this directory. Its own embedded reference, carried in the pinned 1.18.25 binary, writes the global row as `~/.config/opencode/plugin(s)/<name>/` and the project row as `.opencode/plugin/<name>/` or `.opencode/plugins/<name>/`. This provider writes and owns the plural only. Owning both would let one target hold two definitions of the same component that disagree, with the product reading one and this provider reporting the other, and which of the two wins where both exist is not documented -- so a target holding the singular is reported rather than resolved. Recorded here because without a row the next reader repeats the search, and because a directory the product reads and this provider does not own is exactly what this block is for.",
+        "source": "measured in the pinned 1.18.25 bundle, whose bytes match this baseline's own sha256 -- the product carries its own reference table and it names both spellings"
       }
     ],
     "config_home_env": "OPENCODE_CONFIG_DIR",
@@ -250,7 +270,7 @@
     "version": "1.18.25",
     "verified_at": "2026-08-28T08:11:16+00:00"
   },
-  "setup_catalogue_digest": "sha256:0e3d92b2dc1d3b34cfe8a3142c88878f1f8cf0b9d208a3caf3e8ca603439e4b5",
+  "setup_catalogue_digest": "sha256:4c2bd3e7d2047b6ba156773317dfa78fc2bc3267adab549bd66714bc3c41c8d9",
   "previous_software_artifacts": {
     "command": "opencode",
     "shape": "gzip-tar",
