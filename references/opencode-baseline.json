@@ -226,5 +226,6 @@
     },
     "version": "1.18.23",
     "verified_at": "2026-08-27T23:47:44+00:00"
-  }
+  },
+  "setup_catalogue_digest": "sha256:bdeee6be090bb67daca9e15d2708fa54d37204522a04cf70cbc392c865c401ad"
 }
