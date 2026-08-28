@@ -1,0 +1,50 @@
+# What This Harness Owns
+
+Generated from `references/opencode-baseline.json` by
+`tools/build_nddev_builder.py`. Do not edit: the next render overwrites
+it, and the baseline is where a correction belongs.
+
+Every row below was decided by a source, and the source is named. Where
+this file and the binary disagree, the binary is right -- ask it with
+`opencode-setup-system provider-info`.
+
+**Configuration home**: `~/.config/opencode`
+**Environment override**: `OPENCODE_CONFIG_DIR`
+
+## The configuration file
+
+`opencode.json` is **jsonc**, and the parser accepts comments.
+The vendor publishes a schema at <https://opencode.ai/config.json>, and `tools/validate_setup_schemas.py` checks every shipped file that names it.
+
+**JSONC**, at both spellings -- line comments, block comments and trailing commas are all accepted, and the product's own bundle uses a `jsonc-parser` with `formattingOptions`. Strict JSON is a subset, so what this repository writes is valid; the distinction matters for a file a *person* has edited, which a backup will capture with its comments intact.
+
+## Owned surfaces
+
+| path | kinds | shape |
+|---|---|---|
+| `AGENTS.md` | instruction | file |
+| `opencode.json` | setting | file |
+| `skills` | skill | directory |
+| `agents` | agent | directory |
+| `commands` | command | directory |
+| `plugins` | plugin | directory |
+| `tui.json` | *(routes no kind)* | file |
+
+A surface that routes no kind is owned deliberately: a backup captures
+it and a restore returns it, and no component is routed there because
+the kind it would carry already routes somewhere else. One kind on two
+surfaces makes a consumer's route ambiguous, and the guard in
+`harness_runtime::surfaces` refuses it by name.
+
+## Considered and not owned
+
+8 rows. Each records what was searched, so the next reader does not repeat the search:
+
+- **`opencode.jsonc`** — Documented, and deliberately not owned. OpenCode reads either spelling; owning both would let a target hold two documents that disagree, with the product picking one and this provider reporting the other. Owning one keeps the answer single, and a target configured the other way is preserved verbatim as any sibling overlay is.
+- **`tui.jsonc`** — Documented, and deliberately not owned, for the same reason as opencode.jsonc: it is the second spelling of one file, and owning both would let a target hold two documents that disagree with the product reading one and this provider reporting the other.
+- **`NDDEV-OPENCODE-PROVIDER.json`** — This provider's own state file: which setup is applied, the identity it recorded, and which slot reverses the last operation. Written by every operation and excluded from target identity, because counting it would leave a target different from the identity the operation just wrote. Not a projection surface and never ownable as one.
+- **`.opencode-setup-system`** — This provider's own control directory: the target lock, the backup slots and their payloads. Kept out of the declaration for the same reason as the state file, and recorded here because the declined list is where a reader looks before opening a file to find out what it is.
+- **`.gitignore`** — The product writes this into its configuration home on first run, listing `node_modules`, `package.json`, `package-lock.json`, `bun.lock` and itself -- it treats the home as a place a package manager might run. Measured 2026-08-28 by launching the product through this provider. Not owned: nothing here projects a `.gitignore`, and a file the product rewrites on its own schedule is not a surface a setup can promise to restore.
+- **`$HOME/.agents/skills`** — OpenCode reads the user-level convention root. The vendor lists it as *Global agent-compatible: ~/.agents/skills/<name>/SKILL.md*, and the pinned 1.18.24 binary carries `.agents/skills/<name>/SKILL.md` as a path literal. Not owned, for the reason Codex's declaration gives: the root belongs to the convention, a namespace is removed whole, and two providers declaring one path are not two owners.
+- **`$HOME/.claude/skills`** — OpenCode also reads Claude Code's skills directory for compatibility -- `.claude/skills/<name>/SKILL.md` is a path literal in the pinned binary, and the vendor lists it as *Global Claude-compatible*. Another product's home, never this provider's to own, and recorded because claude-setup-system owns `skills` there.
+- **`opencode-runtime-state`** — One row for what the product writes **outside its configuration home entirely**, because it writes to three other roots and none of them had a row.
