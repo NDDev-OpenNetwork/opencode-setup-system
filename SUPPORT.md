@@ -245,6 +245,10 @@ Recorded and never touched: it needs root or Administrator to write, it is not u
 
 The user configuration home is **not** per-OS, which is why only this row is. The same bundle resolves it as `XDG_CONFIG_HOME || ~/.config` joined with the application name, with no platform branch at all. ([source](https://opencode.ai/docs/config; measured in the pinned 1.18.25 bundle, whose bytes match this baseline's own sha256))
 
+**`mcp_config.json`** -- MCP servers are the `mcp` key inside `opencode.json` -- `{"mcp": {"<name>": {"type": "local", "command": [...]}}}` -- confirmed on the vendor's MCP page 2026-08-29 and in the product's own built-in `customize-opencode` skill. That file is owned here and written and restored whole, so MCP is covered by the `setting` kind. **A key inside a file is not a projection surface.** No separate MCP file exists under the config home. ([source](https://opencode.ai/docs/mcp-servers/; and the product's own built-in customize-opencode skill, read from the pinned 1.18.25 artifact))
+
+**`hooks.json`** -- **Hooks are functions a plugin module exports**, not a file. The vendor's plugin page, read 2026-08-29: *"A plugin is a JavaScript/TypeScript module that exports one or more plugin functions. Each function receives a context object and returns a hooks object."* The names -- `tool.execute.before`, `session.created`, `permission.asked` and the rest -- are keys of that returned object. There is no `hooks.json` and no `hooks` key in `opencode.json`, so a hook reaches this product through `plugins/`, which is owned and routes `plugin`. ([source](https://opencode.ai/docs/plugins/))
+
 ## Response
 
 One maintainer. Defects are triaged as time allows; security reports are

@@ -93,7 +93,7 @@
     "OPENCODE_DISABLE_CLAUDE_CODE",
     "OPENCODE_DISABLE_SHARE"
   ],
-  "verified_at": "2026-08-28T08:11:16+00:00",
+  "verified_at": "2026-08-29T08:27:47+00:00",
   "native_surfaces": {
     "verified_at": "2026-08-27",
     "config_home": "~/.config/opencode",
@@ -106,7 +106,7 @@
         "shape": "file",
         "source": "https://opencode.ai/docs/rules",
         "evidence": "page",
-        "note": "second in the search order, after a project's own"
+        "note": "second in the search order, after a project's own\n\n**Searched in the product's own pinned bytes on 2026-08-29 and not found, which argues nothing either way.** Fixed-string, anchored to this product's configuration home -- the bare leaf name is in every one of these binaries and proves nothing, so only the anchored form counts. An invented path was searched in the same run and was also absent, so the search discriminates.\n\nThis row stays `page` because **a path built by joining a directory to a name at runtime never appears as a literal**, and that is the shape of every remaining one. Moving it off `page` needs the product run against a target and asked what it resolved, not a deeper grep."
       },
       {
         "path": "opencode.json",
@@ -155,7 +155,8 @@
         ],
         "shape": "directory",
         "source": "https://opencode.ai/docs/plugins",
-        "evidence": "page"
+        "evidence": "page",
+        "note": "\n\n**Searched in the product's own pinned bytes on 2026-08-29 and not found, which argues nothing either way.** Fixed-string, anchored to this product's configuration home -- the bare leaf name is in every one of these binaries and proves nothing, so only the anchored form counts. An invented path was searched in the same run and was also absent, so the search discriminates.\n\nThis row stays `page` because **a path built by joining a directory to a name at runtime never appears as a literal**, and that is the shape of every remaining one. Moving it off `page` needs the product run against a target and asked what it resolved, not a deeper grep."
       },
       {
         "path": "tui.json",
@@ -163,7 +164,7 @@
         "shape": "file",
         "source": "https://opencode.ai/docs/tui",
         "evidence": "page",
-        "note": "keybinds, theme, attention and sounds, deliberately separate from opencode.json, which the same documentation describes as server and runtime behaviour; the setting route stays opencode.json"
+        "note": "keybinds, theme, attention and sounds, deliberately separate from opencode.json, which the same documentation describes as server and runtime behaviour; the setting route stays opencode.json\n\n**Searched in the product's own pinned bytes on 2026-08-29 and not found, which argues nothing either way.** Fixed-string, anchored to this product's configuration home -- the bare leaf name is in every one of these binaries and proves nothing, so only the anchored form counts. An invented path was searched in the same run and was also absent, so the search discriminates.\n\nThis row stays `page` because **a path built by joining a directory to a name at runtime never appears as a literal**, and that is the shape of every remaining one. Moving it off `page` needs the product run against a target and asked what it resolved, not a deeper grep."
       }
     ],
     "declined": [
@@ -226,6 +227,16 @@
         "path": "managed-config",
         "reason": "Not a path in the target, and named without an extension for that reason: the managed configuration directory is a **system** path, one per operating system, and every recorded path here is relative to the target.\n\n  * Linux — `/etc/opencode/`\n  * macOS — `/Library/Application Support/opencode/`\n  * Windows — `%ProgramData%\\\\opencode`\n\nAll three are in the pinned 1.18.25 bundle's own emitted source, in one switch: `case\"darwin\": return \"/Library/Application Support/opencode\"; case\"win32\": return join(process.env.ProgramData||\"C:\\\\ProgramData\",\"opencode\"); default: return \"/etc/opencode\"`. macOS additionally reads a managed plist from the `ai.opencode.managed` preference domain, deployable by MDM, which the same bundle carries as `parseManagedPlist` and `managedPreferences`.\n\n**It bears on the `full-auto` posture**, the same way the managed policy does on the harness next door. An administrator's `opencode.json` there is loaded at the highest priority tier and overrides everything, so this provider can install, verify and restore a permissive posture cleanly on a managed machine and change nothing about what the product actually permits. The setup is not wrong and the target is not wrong; a higher layer wins.\n\nRecorded and never touched: it needs root or Administrator to write, it is not under the configuration home this provider is given, and a provider that edited an organisation's policy would be doing the one thing this estate refuses everywhere else.\n\nThe user configuration home is **not** per-OS, which is why only this row is. The same bundle resolves it as `XDG_CONFIG_HOME || ~/.config` joined with the application name, with no platform branch at all.",
         "source": "https://opencode.ai/docs/config; measured in the pinned 1.18.25 bundle, whose bytes match this baseline's own sha256"
+      },
+      {
+        "path": "mcp_config.json",
+        "reason": "MCP servers are the `mcp` key inside `opencode.json` -- `{\"mcp\": {\"<name>\": {\"type\": \"local\", \"command\": [...]}}}` -- confirmed on the vendor's MCP page 2026-08-29 and in the product's own built-in `customize-opencode` skill. That file is owned here and written and restored whole, so MCP is covered by the `setting` kind. **A key inside a file is not a projection surface.** No separate MCP file exists under the config home.",
+        "source": "https://opencode.ai/docs/mcp-servers/; and the product's own built-in customize-opencode skill, read from the pinned 1.18.25 artifact"
+      },
+      {
+        "path": "hooks.json",
+        "reason": "**Hooks are functions a plugin module exports**, not a file. The vendor's plugin page, read 2026-08-29: *\"A plugin is a JavaScript/TypeScript module that exports one or more plugin functions. Each function receives a context object and returns a hooks object.\"* The names -- `tool.execute.before`, `session.created`, `permission.asked` and the rest -- are keys of that returned object. There is no `hooks.json` and no `hooks` key in `opencode.json`, so a hook reaches this product through `plugins/`, which is owned and routes `plugin`.",
+        "source": "https://opencode.ai/docs/plugins/"
       }
     ],
     "config_home_env": "OPENCODE_CONFIG_DIR",
@@ -300,9 +311,9 @@
       }
     },
     "version": "1.18.25",
-    "verified_at": "2026-08-28T08:11:16+00:00"
+    "verified_at": "2026-08-29T08:27:47+00:00"
   },
-  "setup_catalogue_digest": "sha256:fe1dc436e6bb1b5a179f3e9d98f2327e2b5862b6fa11efb3aa4f9d656ccde1da",
+  "setup_catalogue_digest": "sha256:4160c2ac3c1eae56be0543dc5fc0f06b98185e698553a7edce42a9e7427e3be7",
   "previous_software_artifacts": {
     "command": "opencode",
     "shape": "gzip-tar",
