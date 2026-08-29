@@ -40,16 +40,32 @@ the kind it would carry already routes somewhere else. One kind on two
 surfaces makes a consumer's route ambiguous, and the guard in
 `harness_runtime::surfaces` refuses it by name.
 
+## A second target: `target_scope: user_root`
+
+Rooted at `~/.agents`, which is **not** this product's configuration
+home. A consumer reaches it by naming the scope on the request, and
+every path below is relative to that root rather than to the home
+above -- writing the root into the path again would nest it twice.
+
+| path | routes | shape | decided by | exercised by |
+| --- | --- | --- | --- | --- |
+| `skills` | skill | directory | <https://opencode.ai/docs/skills/, and measured by running the pinned 1.18.25 product with `debug skill` against a temporary HOME, 2026-08-29> | **ran it** |
+
+**Under a scope the namespace is the permission and the recorded
+files are the inventory.** A root like this one is read by several
+products at once, so `remove`, the capture and a restore all act on
+the files this provider recorded writing -- never on the namespace
+whole, which would take or revert a neighbour's work.
+
 ## Considered and not owned
 
-13 rows. Each records what was searched, so the next reader does not repeat the search:
+12 rows. Each records what was searched, so the next reader does not repeat the search:
 
 - **`opencode.jsonc`** — Documented, and deliberately not owned. OpenCode reads either spelling; owning both would let a target hold two documents that disagree, with the product picking one and this provider reporting the other. Owning one keeps the answer single, and a target configured the other way is preserved verbatim as any sibling overlay is.
 - **`tui.jsonc`** — Documented, and deliberately not owned, for the same reason as opencode.jsonc: it is the second spelling of one file, and owning both would let a target hold two documents that disagree with the product reading one and this provider reporting the other.
 - **`NDDEV-OPENCODE-PROVIDER.json`** — This provider's own state file: which setup is applied, the identity it recorded, and which slot reverses the last operation. Written by every operation and excluded from target identity, because counting it would leave a target different from the identity the operation just wrote. Not a projection surface and never ownable as one.
 - **`.opencode-setup-system`** — This provider's own control directory: the target lock, the backup slots and their payloads. Kept out of the declaration for the same reason as the state file, and recorded here because the declined list is where a reader looks before opening a file to find out what it is.
 - **`.gitignore`** — The product writes this into its configuration home on first run, listing `node_modules`, `package.json`, `package-lock.json`, `bun.lock` and itself -- it treats the home as a place a package manager might run. Measured 2026-08-28 by launching the product through this provider. Not owned: nothing here projects a `.gitignore`, and a file the product rewrites on its own schedule is not a surface a setup can promise to restore.
-- **`$HOME/.agents/skills`** — OpenCode reads the user-level convention root. The vendor lists it as *Global agent-compatible: ~/.agents/skills/<name>/SKILL.md*, and the pinned 1.18.24 binary carries `.agents/skills/<name>/SKILL.md` as a path literal. Not owned, for the reason Codex's declaration gives: the root belongs to the convention, a namespace is removed whole, and two providers declaring one path are not two owners.
 - **`$HOME/.claude/skills`** — OpenCode also reads Claude Code's skills directory for compatibility -- `.claude/skills/<name>/SKILL.md` is a path literal in the pinned binary, and the vendor lists it as *Global Claude-compatible*. Another product's home, never this provider's to own, and recorded because claude-setup-system owns `skills` there.
 - **`opencode-runtime-state`** — One row for what the product writes **outside its configuration home entirely**, because it writes to three other roots and none of them had a row.
 - **`agent`** — Opencode accepts the singular and the plural spelling of this directory. Its own embedded reference, carried in the pinned 1.18.25 binary, writes the global row as `~/.config/opencode/agent(s)/<name>.md` and the project row as `.opencode/agent/<name>.md` or `.opencode/agents/<name>.md`. This provider writes and owns the plural only. Owning both would let one target hold two definitions of the same component that disagree, with the product reading one and this provider reporting the other, and which of the two wins where both exist is not documented -- so a target holding the singular is reported rather than resolved. Recorded here because without a row the next reader repeats the search, and because a directory the product reads and this provider does not own is exactly what this block is for.
