@@ -193,11 +193,6 @@
         "source": "measured through launch; no vendor page names it"
       },
       {
-        "path": "$HOME/.agents/skills",
-        "reason": "OpenCode reads the user-level convention root. The vendor lists it as *Global agent-compatible: ~/.agents/skills/<name>/SKILL.md*, and the pinned 1.18.24 binary carries `.agents/skills/<name>/SKILL.md` as a path literal. Not owned, for the reason Codex's declaration gives: the root belongs to the convention, a namespace is removed whole, and two providers declaring one path are not two owners.",
-        "source": "https://opencode.ai/docs/skills/ and measured from the pinned artifact, digest verified before reading (opencode 1.18.24)"
-      },
-      {
         "path": "$HOME/.claude/skills",
         "reason": "OpenCode also reads Claude Code's skills directory for compatibility -- `.claude/skills/<name>/SKILL.md` is a path literal in the pinned binary, and the vendor lists it as *Global Claude-compatible*. Another product's home, never this provider's to own, and recorded because claude-setup-system owns `skills` there.",
         "source": "https://opencode.ai/docs/skills/ and measured from the pinned artifact, digest verified before reading (opencode 1.18.24)"
@@ -229,7 +224,7 @@
       },
       {
         "path": "managed-config",
-        "reason": "Not a path in the target, and named without an extension for that reason: the managed configuration directory is a **system** path, one per operating system, and every recorded path here is relative to the target.\n\n  * Linux \u2014 `/etc/opencode/`\n  * macOS \u2014 `/Library/Application Support/opencode/`\n  * Windows \u2014 `%ProgramData%\\\\opencode`\n\nAll three are in the pinned 1.18.25 bundle's own emitted source, in one switch: `case\"darwin\": return \"/Library/Application Support/opencode\"; case\"win32\": return join(process.env.ProgramData||\"C:\\\\ProgramData\",\"opencode\"); default: return \"/etc/opencode\"`. macOS additionally reads a managed plist from the `ai.opencode.managed` preference domain, deployable by MDM, which the same bundle carries as `parseManagedPlist` and `managedPreferences`.\n\n**It bears on the `full-auto` posture**, the same way the managed policy does on the harness next door. An administrator's `opencode.json` there is loaded at the highest priority tier and overrides everything, so this provider can install, verify and restore a permissive posture cleanly on a managed machine and change nothing about what the product actually permits. The setup is not wrong and the target is not wrong; a higher layer wins.\n\nRecorded and never touched: it needs root or Administrator to write, it is not under the configuration home this provider is given, and a provider that edited an organisation's policy would be doing the one thing this estate refuses everywhere else.\n\nThe user configuration home is **not** per-OS, which is why only this row is. The same bundle resolves it as `XDG_CONFIG_HOME || ~/.config` joined with the application name, with no platform branch at all.",
+        "reason": "Not a path in the target, and named without an extension for that reason: the managed configuration directory is a **system** path, one per operating system, and every recorded path here is relative to the target.\n\n  * Linux — `/etc/opencode/`\n  * macOS — `/Library/Application Support/opencode/`\n  * Windows — `%ProgramData%\\\\opencode`\n\nAll three are in the pinned 1.18.25 bundle's own emitted source, in one switch: `case\"darwin\": return \"/Library/Application Support/opencode\"; case\"win32\": return join(process.env.ProgramData||\"C:\\\\ProgramData\",\"opencode\"); default: return \"/etc/opencode\"`. macOS additionally reads a managed plist from the `ai.opencode.managed` preference domain, deployable by MDM, which the same bundle carries as `parseManagedPlist` and `managedPreferences`.\n\n**It bears on the `full-auto` posture**, the same way the managed policy does on the harness next door. An administrator's `opencode.json` there is loaded at the highest priority tier and overrides everything, so this provider can install, verify and restore a permissive posture cleanly on a managed machine and change nothing about what the product actually permits. The setup is not wrong and the target is not wrong; a higher layer wins.\n\nRecorded and never touched: it needs root or Administrator to write, it is not under the configuration home this provider is given, and a provider that edited an organisation's policy would be doing the one thing this estate refuses everywhere else.\n\nThe user configuration home is **not** per-OS, which is why only this row is. The same bundle resolves it as `XDG_CONFIG_HOME || ~/.config` joined with the application name, with no platform branch at all.",
         "source": "https://opencode.ai/docs/config; measured in the pinned 1.18.25 bundle, whose bytes match this baseline's own sha256"
       }
     ],
@@ -242,7 +237,26 @@
       "note": "**JSONC**, at both spellings -- line comments, block comments and trailing commas are all accepted, and the product's own bundle uses a `jsonc-parser` with `formattingOptions`. Strict JSON is a subset, so what this repository writes is valid; the distinction matters for a file a *person* has edited, which a backup will capture with its comments intact.",
       "measured_at": "2026-08-28",
       "schema": "https://opencode.ai/config.json"
-    }
+    },
+    "scoped": [
+      {
+        "target_scope": "user_root",
+        "root": "~/.agents",
+        "surfaces": [
+          {
+            "path": "skills",
+            "kinds": [
+              "skill"
+            ],
+            "shape": "directory",
+            "source": "https://opencode.ai/docs/skills/, and measured by running the pinned 1.18.25 product with `debug skill` against a temporary HOME, 2026-08-29",
+            "evidence": "ran",
+            "note": "**Run, not read.** The pinned `opencode-linux-x64-1.18.25.tgz` was fetched, its digest checked against the artifact table, and the binary driven with `opencode debug skill` -- a credential-free command that prints the resolved skill list as JSON. A `SKILL.md` at `$HOME/.agents/skills/nddev-user-root-probe/` is listed with its full path.\n\n**With a control.** A second skill at `$HOME/.agents-not-a-root/skills/` -- a sibling root no page names -- is absent from the same listing, so the product reads the documented root rather than scanning `$HOME` broadly.\n\nThe product corroborates it in its own words: its built-in `customize-opencode` skill tabulates *External skills (auto-loaded): `~/.claude/skills/<name>/SKILL.md`, `~/.agents/skills/<name>/SKILL.md`*, and names `OPENCODE_DISABLE_EXTERNAL_SKILLS` and `OPENCODE_DISABLE_CLAUDE_CODE_SKILLS` as the switches that turn those two scans off.\n\nThe one root in this estate that belongs to a convention rather than to a product. `$HOME/.agents/skills` is a *sibling* of this product's configuration home, not a child, so nothing declared against this provider's own target can reach it -- that is what `user_root` exists for.\n\n**Owning a shared root, and the reason this record used to decline it.** Five of the seven products read this root, and the decline said: *a namespace is removed whole, so a second declaration would make either provider's remove take the other's skills.* That sentence was true when it was written and stopped being true when `written_paths` shipped -- `remove` under this scope takes the files this provider recorded writing and refuses rather than widening when it cannot read the record, and each harness carries its own state file, so they coexist under one root. The reason was not re-read when the thing it described changed.\n\nRelative to this scope's own root the path is `skills`, not `.agents/skills`: the root is what the scope names, and writing it into the path again would put the skills at `~/.agents/.agents/skills`."
+          }
+        ],
+        "declined": []
+      }
+    ]
   },
   "software_artifacts": {
     "command": "opencode",
@@ -288,7 +302,7 @@
     "version": "1.18.25",
     "verified_at": "2026-08-28T08:11:16+00:00"
   },
-  "setup_catalogue_digest": "sha256:9044ce3a2128e13b585016e65200af77ac4be69884ece1f9765faa619e88e2c8",
+  "setup_catalogue_digest": "sha256:fe1dc436e6bb1b5a179f3e9d98f2327e2b5862b6fa11efb3aa4f9d656ccde1da",
   "previous_software_artifacts": {
     "command": "opencode",
     "shape": "gzip-tar",
