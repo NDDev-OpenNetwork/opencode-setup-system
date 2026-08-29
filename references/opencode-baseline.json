@@ -267,7 +267,10 @@
         ],
         "declined": []
       }
-    ]
+    ],
+    "projection_basis": {
+      "plugin": "plugins"
+    }
   },
   "software_artifacts": {
     "command": "opencode",
