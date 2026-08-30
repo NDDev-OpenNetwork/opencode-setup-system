@@ -37,7 +37,13 @@
     "ubuntu_glibc_version_floor_note": "no-official-floor",
     "linux_vendor_artifact_names": "The upstream CLI release assets retain vendor names such as linux-x64 and linux-x64-baseline; nddev-opencode-app maps the glibc Linux artifacts only after the host is verified as ID=ubuntu and glibc.",
     "windows_note": "The vendor publishes `opencode-windows-x64` and `opencode-windows-arm64` and its own `opencode-ai` package declares `os: [darwin, linux, win32]`. Read from the npm registry on 2026-08-29, not from a page -- a third-party guide asserted that no windows-arm64 binary exists, and the registry has one at the same version as every other host.",
-    "coverage_note": "Platform coverage is decided by `software_artifacts` and nothing else. This block held `windows` under unsupported until 2026-08-29, inherited from the retired nddev-*-app line, and by then it was false: the vendor ships Windows and this provider installs it. It said so for as long as it did because nothing in this repository read the block -- see `tools/transcribe_software.py --check`, which now compares it against the artifact table so the two cannot disagree again."
+    "coverage_note": "Platform coverage is decided by `software_artifacts` and nothing else. This block held `windows` under unsupported until 2026-08-29, inherited from the retired nddev-*-app line, and by then it was false: the vendor ships Windows and this provider installs it. It said so for as long as it did because nothing in this repository read the block -- see `tools/transcribe_software.py --check`, which now compares it against the artifact table so the two cannot disagree again.",
+    "x64_baseline_builds": {
+      "opencode-linux-x64": "identical",
+      "opencode-darwin-x64": "identical",
+      "opencode-windows-x64": "signature-only"
+    },
+    "x64_baseline_builds_note": "The vendor publishes a `-baseline` package beside each x64 build, for CPUs without AVX2, and its own launcher tries them as a fallback list and keeps whichever answers `--version`. This provider selects one package per platform and never falls back, so a review filed every non-AVX2 x64 host as incorrectly covered. Measured 2026-08-31 against the pinned 1.18.25 packages, by comparing the program inside each pair rather than the tarballs: there is no second build. Linux and macOS are byte-identical to their `-baseline` siblings, and the Windows pair differs in 1694 bytes of 179MB -- an Authenticode countersignature three seconds later and the header fields signing rewrites -- with the same size and the same AVX2 instruction counts. So the finding is empty at this pin, and empty is a property of this release rather than of the design: `refresh_software_pins.py` now compares the pair at every refresh and says so when they stop matching, which is the point at which the host scope would need a CPU dimension. The distinction the vendor keeps the names for is the fallback list, not a second program."
   },
   "official_sources": {
     "repository": "https://github.com/anomalyco/opencode",
@@ -73,7 +79,13 @@
       "commands/nddev-orient.md",
       "commands/nddev-validate.md"
     ],
-    "marketplace": null
+    "marketplace": null,
+    "product_writes_into_target": [
+      ".gitignore"
+    ],
+    "product_writes_into_target_note": "Exercised 2026-08-31 against a temporary home: a single `debug config` -- a read-only command, and the provider's own probe -- creates `.gitignore` in the target, listing `node_modules`, `package.json`, `package-lock.json`, `bun.lock` and itself. It appears with no plugin installed and with no setup content that asks for it, so any target this product has started against has it. It is not in `native_namespaces`: this provider neither installs it nor removes it, and it is the product's, not a user's. Recorded so a target that grew one is not read as somebody's stray file.",
+    "permission_env": "OPENCODE_PERMISSION",
+    "permission_env_note": "**An inherited variable replaces the posture this provider installed, and launch passes it through.** Exercised 2026-08-31 against a temporary home with `baseline` in the target: `debug agent build` ends `edit ask, bash ask`, and the same run with `OPENCODE_PERMISSION={\"bash\":\"allow\"}` in the environment ends `edit ask, bash allow`. Whoever starts the provider decides that, not the setup.\n\n**Named and not closed, deliberately.** Launch forces two variables -- the configuration home and the update switch -- because without the first the target is not read at all and without the second the bytes this provider recorded can be replaced underneath it. Neither is a posture. Scrubbing this one would be: it is a capability the product gives a person, and taking it away silently is the same move as deleting an `opencode.jsonc` somebody put beside our file. The answer is the same as there -- say it, do not decide it -- and saying it is a launch-time report this build does not have yet. Recorded so the gap is a known one rather than a discovery."
   },
   "permissions": {
     "current_key": "permission",
@@ -85,12 +97,15 @@
     ],
     "full_auto_shape": {
       "permission": "allow"
-    }
+    },
+    "evaluation": "last-matching-rule",
+    "evaluation_note": "**The last matching rule decides, and a configured permission map is appended after the product's own.** Exercised 2026-08-31 by running the pinned 1.18.25 binary against a temporary home: `debug agent build` renders the resolved list, and with no configuration it opens `* -> allow`, then `doom_loop` and `external_directory` ask, `question`, `plan_enter` and `plan_exit` deny, and `read` asks for `*.env` and `*.env.*`. Anything written into `permission` appears after all of them: the `full-auto` catch-all lands at index 14 and `baseline`'s `edit`/`bash` asks at 14 and 15. The shipped binary selects with `findLast`, and the product's own ordering says the same thing -- the default agent carries `question -> deny` at index 5 and `question -> allow` at 12, which is only meaningful if the later one wins.\n\n**This was recorded backwards until 2026-08-31.** The `full-auto` description said seven rules were the product's own and no configuration moved them. The measurement behind it asked whether those seven were still in the resolved list, and they are -- every one, still printed -- rather than which row decides. The probe in the evidence lane could not have contradicted it either: it ran `debug config`, which echoes the configuration back, so it answered *was our file read* while the sentence claimed *and it changes nothing*. It now runs `debug agent build` with an ordered marker."
   },
   "source_verified_runtime_flags": [
-    "OPENCODE_DISABLE_PROJECT_CONFIG",
-    "OPENCODE_DISABLE_EXTERNAL_SKILLS",
+    "OPENCODE_DISABLE_AUTOUPDATE",
     "OPENCODE_DISABLE_CLAUDE_CODE",
+    "OPENCODE_DISABLE_EXTERNAL_SKILLS",
+    "OPENCODE_DISABLE_PROJECT_CONFIG",
     "OPENCODE_DISABLE_SHARE"
   ],
   "verified_at": "2026-08-29T10:56:16+00:00",
@@ -116,7 +131,7 @@
         "shape": "file",
         "source": "https://opencode.ai/docs/config; route measured by running `debug config` against a temporary home",
         "evidence": "ran",
-        "note": "MCP servers live here under the mcp key; a key inside a file is not a projection surface, so mcp is not declared. The route was confirmed 2026-08-29 by running the pinned 1.18.25 bundle against a temporary configuration home: a file written at <home>/opencode/opencode.json came back from `debug config`, and an invented key placed in the same file did not -- which is what separates a key the build reads from one it drops in silence, and is the control the run needed to prove anything."
+        "note": "MCP servers live here under the mcp key; a key inside a file is not a projection surface, so mcp is not declared. The route was confirmed 2026-08-29 by running the pinned 1.18.25 bundle against a temporary configuration home: a file written at <home>/opencode/opencode.json came back from `debug config`, and an invented key placed in the same file did not -- which is what separates a key the build reads from one it drops in silence, and is the control the run needed to prove anything.\n\n**A second spelling this product reads and this provider does not own.** Measured 2026-08-31 by running the pinned 1.18.25 binary against a temporary home: an `opencode.jsonc` placed beside our `opencode.json` in the same target is the one that takes effect -- `debug config` returned the JSONC file's value, not ours. The product's own candidate list joins the two in that order and the later one wins, so a target whose owned bytes are clean can be running configuration this provider never wrote. Owning the second spelling is not the answer, because a setup could then install two files that disagree, and deleting a file somebody else put there is not either. What is missing is that nothing here looks."
       },
       {
         "path": "skills",
@@ -126,7 +141,7 @@
         "shape": "directory",
         "source": "https://opencode.ai/docs/skills; routing exercised against the pinned product",
         "evidence": "ran",
-        "note": "Exercised 2026-08-28 by running the product against a temporary OPENCODE_CONFIG_DIR with a marker component in this directory: `opencode debug skill` reports the skill with its location, and `opencode debug config` resolves the agent and the command by name."
+        "note": "Exercised 2026-08-28 by running the product against a temporary OPENCODE_CONFIG_DIR with a marker component in this directory: `opencode debug skill` reports the skill with its location, and `opencode debug config` resolves the agent and the command by name.\n\n**The singular spelling is read too, and owning the plural one decides nothing.** The pinned binary globs `{skill,skills}`, and the same for `{agent,agents}`, `{command,commands}` and `{plugin,plugins}`. Exercised 2026-08-31 by running the product against a temporary home with one name declared twice, once under `skills/` which this provider owns and once under `skill/` which it does not: the product lists **one** entry, and which of the two survives follows the order they were created rather than the spelling. Written together, the owned copy won; written a second apart, the unowned one did. So an unowned file can replace a provider-owned component of the same name, silently and in either direction, and this target's digest sees a clean owned tree in every case. Recorded here rather than acted on: refusing a collision is a change to what `plan` accepts and belongs with the alias work above, not bolted to one surface."
       },
       {
         "path": "agents",
@@ -136,7 +151,7 @@
         "shape": "directory",
         "source": "https://opencode.ai/docs/agents; routing exercised against the pinned product",
         "evidence": "ran",
-        "note": "Exercised 2026-08-28 by running the product against a temporary OPENCODE_CONFIG_DIR with a marker component in this directory: `opencode debug skill` reports the skill with its location, and `opencode debug config` resolves the agent and the command by name."
+        "note": "Exercised 2026-08-28 by running the product against a temporary OPENCODE_CONFIG_DIR with a marker component in this directory: `opencode debug skill` reports the skill with its location, and `opencode debug config` resolves the agent and the command by name.\n\n**A singular spelling of this directory is read as well** -- see the `skills` row, where the collision was measured. The finding is the glob's, not that surface's."
       },
       {
         "path": "commands",
@@ -146,7 +161,7 @@
         "shape": "directory",
         "source": "https://opencode.ai/docs/commands; routing exercised against the pinned product",
         "evidence": "ran",
-        "note": "Exercised 2026-08-28 by running the product against a temporary OPENCODE_CONFIG_DIR with a marker component in this directory: `opencode debug skill` reports the skill with its location, and `opencode debug config` resolves the agent and the command by name."
+        "note": "Exercised 2026-08-28 by running the product against a temporary OPENCODE_CONFIG_DIR with a marker component in this directory: `opencode debug skill` reports the skill with its location, and `opencode debug config` resolves the agent and the command by name.\n\n**A singular spelling of this directory is read as well** -- see the `skills` row, where the collision was measured. The finding is the glob's, not that surface's."
       },
       {
         "path": "plugins",
@@ -155,8 +170,8 @@
         ],
         "shape": "directory",
         "source": "https://opencode.ai/docs/plugins",
-        "evidence": "page",
-        "note": "\n\n**Searched in the product's own pinned bytes on 2026-08-29 and not found, which argues nothing either way.** Fixed-string, anchored to this product's configuration home -- the bare leaf name is in every one of these binaries and proves nothing, so only the anchored form counts. An invented path was searched in the same run and was also absent, so the search discriminates.\n\nThis row stays `page` because **a path built by joining a directory to a name at runtime never appears as a literal**, and that is the shape of every remaining one. Moving it off `page` needs the product run against a target and asked what it resolved, not a deeper grep."
+        "evidence": "bytes",
+        "note": "\n\n**Searched in the product's own pinned bytes on 2026-08-29 and not found, which argues nothing either way.** Fixed-string, anchored to this product's configuration home -- the bare leaf name is in every one of these binaries and proves nothing, so only the anchored form counts. An invented path was searched in the same run and was also absent, so the search discriminates.\n\nThis row stays `page` because **a path built by joining a directory to a name at runtime never appears as a literal**, and that is the shape of every remaining one. Moving it off `page` needs the product run against a target and asked what it resolved, not a deeper grep.\n\n**A singular spelling of this directory is read as well** -- see the `skills` row, where the collision was measured. The finding is the glob's, not that surface's."
       },
       {
         "path": "tui.json",
@@ -164,7 +179,7 @@
         "shape": "file",
         "source": "https://opencode.ai/docs/tui",
         "evidence": "page",
-        "note": "keybinds, theme, attention and sounds, deliberately separate from opencode.json, which the same documentation describes as server and runtime behaviour; the setting route stays opencode.json\n\n**Searched in the product's own pinned bytes on 2026-08-29 and not found, which argues nothing either way.** Fixed-string, anchored to this product's configuration home -- the bare leaf name is in every one of these binaries and proves nothing, so only the anchored form counts. An invented path was searched in the same run and was also absent, so the search discriminates.\n\nThis row stays `page` because **a path built by joining a directory to a name at runtime never appears as a literal**, and that is the shape of every remaining one. Moving it off `page` needs the product run against a target and asked what it resolved, not a deeper grep."
+        "note": "keybinds, theme, attention and sounds, deliberately separate from opencode.json, which the same documentation describes as server and runtime behaviour; the setting route stays opencode.json\n\n**Searched in the product's own pinned bytes on 2026-08-29 and not found, which argues nothing either way.** Fixed-string, anchored to this product's configuration home -- the bare leaf name is in every one of these binaries and proves nothing, so only the anchored form counts. An invented path was searched in the same run and was also absent, so the search discriminates.\n\nThis row stays `page` because **a path built by joining a directory to a name at runtime never appears as a literal**, and that is the shape of every remaining one. Moving it off `page` needs the product run against a target and asked what it resolved, not a deeper grep.\n\n**There is no `tui.jsonc`, and the symmetry was asserted before it was checked.** A review of this provider filed the JSONC alias for this file as a finding of equal standing with `opencode.json`'s. The pinned 1.18.25 binary carries `tui.json` eight times and the JSONC spelling not once. The alias is real for the main configuration and absent for this one; a neighbour's property is not this file's."
       }
     ],
     "declined": [
@@ -316,7 +331,7 @@
     "version": "1.18.25",
     "verified_at": "2026-08-29T10:56:16+00:00"
   },
-  "setup_catalogue_digest": "sha256:2d34c44367b9dd5e5367d8511b7feb27282aeef4978b795b19c6084bf4524ef2",
+  "setup_catalogue_digest": "sha256:69dec73c1a3d33418fea729bc0b038c98245de94679c00039686cb875f21b793",
   "previous_software_artifacts": {
     "command": "opencode",
     "shape": "gzip-tar",
@@ -360,5 +375,6 @@
     },
     "version": "1.18.24",
     "verified_at": "2026-08-28T04:45:01+00:00"
-  }
+  },
+  "source_verified_runtime_flags_note": "All five read out of the pinned 1.18.25 binary on 2026-08-31 -- the whole `OPENCODE_*` set is in its string table, and these are the five this provider has a reason to name. **Nothing in this repository read this block until now.** It is the same shape as the `windows` row that sat under `unsupported` for weeks while this provider installed Windows: a true-when-written list with no reader, which is the condition a stale fact needs. `native_declaration_names_the_switch_it_sets` now ties `updates_off_env` to this list, so the declaration and the measurement cannot drift apart in silence."
 }

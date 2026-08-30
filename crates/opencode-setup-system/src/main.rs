@@ -14,7 +14,7 @@ use std::process::ExitCode;
 
 mod software;
 
-use harness_runtime::{Harness, LaunchBinding, Scoped};
+use harness_runtime::{Harness, LaunchBinding, Scoped, Shadow};
 use provider_v3::{ComponentKind, ProjectionKind, TargetScope};
 
 /// Everything specific to OpenCode, verified against `opencode-baseline.json`.
@@ -34,12 +34,17 @@ pub const OPENCODE: Harness = Harness {
     launch_binding: LaunchBinding::Complete {
         how: "measured by asking the product which configuration it resolved",
     },
-    // Not measured. The two artifacts this estate has read for this question are
-    // claude's, which carries `DISABLE_UPDATES`, and codex's, which carries no
-    // such literal. This product has been asked nothing, and an empty value here
-    // says the launch environment is untouched rather than that the product
-    // leaves the bytes alone.
-    updates_off_env: "",
+    // Measured 2026-08-31 in the pinned 1.18.25 artifact. The automatic path
+    // reads `if (autoupdate === false || OPENCODE_DISABLE_AUTOUPDATE) return;`
+    // -- the key and the variable are alternatives, and only the variable is
+    // reachable from a launch this provider controls.
+    //
+    // **It stops the automatic path and not the `upgrade` subcommand**, whose
+    // handler does not consult it. That subcommand is a person typing, and it
+    // warns before replacing bytes it cannot attribute to a package manager;
+    // claude's `DISABLE_UPDATES` covers both and this one does not, so the two
+    // entries in this estate do not mean the same thing.
+    updates_off_env: "OPENCODE_DISABLE_AUTOUPDATE",
     // One home, one variable: nothing here is conditional.
     config_home_note: "",
     control_directory: ".opencode-setup-system",
@@ -64,6 +69,43 @@ pub const OPENCODE: Harness = Harness {
         "agents",
         "commands",
         "plugins",
+    ],
+    // Five names the product reads and this provider does not own, each
+    // measured 2026-08-31 by running the pinned 1.18.25 binary against a
+    // temporary home. Declared so `status` can say what it cannot decide.
+    shadowing_names: &[
+        Shadow {
+            name: "opencode.jsonc",
+            over: "opencode.json",
+            effect: "the product's candidate list joins the two in that order \
+                     and keeps the later, so this one wins: with both present \
+                     `debug config` returned the JSONC file's value",
+        },
+        Shadow {
+            name: "skill",
+            over: "skills",
+            effect: "the product globs `{skill,skills}` and one name declared \
+                     in both yields one entry; which survives followed the \
+                     order the two were created, not the spelling",
+        },
+        Shadow {
+            name: "agent",
+            over: "agents",
+            effect: "the product globs `{agent,agents}`, read out of the \
+                     pinned binary; the collision was measured on skills",
+        },
+        Shadow {
+            name: "command",
+            over: "commands",
+            effect: "the product globs `{command,commands}`, read out of the \
+                     pinned binary; the collision was measured on skills",
+        },
+        Shadow {
+            name: "plugin",
+            over: "plugins",
+            effect: "the product globs `{plugin,plugins}`, read out of the \
+                     pinned binary; the collision was measured on skills",
+        },
     ],
     // The product's own: credentials and runtime caches. Never read, never
     // written, and never copied into a backup slot.
@@ -208,6 +250,41 @@ mod tests {
             aggregate, recorded,
             "the setups this binary ships are not the ones {TOOL}-baseline.json \
              records; if the change was meant, put this digest there"
+        );
+    }
+
+    /// The switch this provider sets at launch is one the baseline measured.
+    ///
+    /// `source_verified_runtime_flags` was a list of four environment names
+    /// that nothing in this repository read. That is the exact condition the
+    /// `windows` host row was in while it said `unsupported` and this provider
+    /// installed Windows: true when written, with no reader, and therefore no
+    /// way to notice when it stopped being true. Setting `updates_off_env` to a
+    /// name absent from that list would mean the launch environment carries a
+    /// literal nobody measured in the product.
+    #[test]
+    fn native_declaration_names_the_switch_it_sets() {
+        if OPENCODE.updates_off_env.is_empty() {
+            return;
+        }
+        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../references")
+            .join(format!("{TOOL}-baseline.json"));
+        let baseline: serde_json::Value =
+            serde_json::from_slice(&std::fs::read(&path).unwrap()).unwrap();
+        let measured: Vec<&str> = match baseline["source_verified_runtime_flags"].as_array() {
+            Some(flags) => flags.iter().filter_map(|flag| flag.as_str()).collect(),
+            None => panic!(
+                "launch sets {} and {TOOL}-baseline.json records no \
+                 source-verified runtime flags at all",
+                OPENCODE.updates_off_env,
+            ),
+        };
+        assert!(
+            measured.contains(&OPENCODE.updates_off_env),
+            "launch sets {} and {TOOL}-baseline.json does not record measuring \
+             it in the product; the measured set is {measured:?}",
+            OPENCODE.updates_off_env,
         );
     }
 
