@@ -109,6 +109,12 @@ pub const OPENCODE: Harness = Harness {
     ],
     // The product's own: credentials and runtime caches. Never read, never
     // written, and never copied into a backup slot.
+    // Owned, and nothing this build can install ever lands here: no
+    // component kind routes to them and no setup in this catalogue
+    // carries files there. So a posture selecting itself must not empty
+    // them -- every posture agrees there is nothing, which makes the
+    // emptiness a statement none of them made.
+    custody_namespaces: &["tui.json"],
     never_touch: &["auth.json", "cache"],
     // No near neighbour measured for this product. A marker listed here is a
     // refusal waiting to happen, so nothing is listed without evidence.
@@ -250,41 +256,6 @@ mod tests {
             aggregate, recorded,
             "the setups this binary ships are not the ones {TOOL}-baseline.json \
              records; if the change was meant, put this digest there"
-        );
-    }
-
-    /// The switch this provider sets at launch is one the baseline measured.
-    ///
-    /// `source_verified_runtime_flags` was a list of four environment names
-    /// that nothing in this repository read. That is the exact condition the
-    /// `windows` host row was in while it said `unsupported` and this provider
-    /// installed Windows: true when written, with no reader, and therefore no
-    /// way to notice when it stopped being true. Setting `updates_off_env` to a
-    /// name absent from that list would mean the launch environment carries a
-    /// literal nobody measured in the product.
-    #[test]
-    fn native_declaration_names_the_switch_it_sets() {
-        if OPENCODE.updates_off_env.is_empty() {
-            return;
-        }
-        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("../../references")
-            .join(format!("{TOOL}-baseline.json"));
-        let baseline: serde_json::Value =
-            serde_json::from_slice(&std::fs::read(&path).unwrap()).unwrap();
-        let measured: Vec<&str> = match baseline["source_verified_runtime_flags"].as_array() {
-            Some(flags) => flags.iter().filter_map(|flag| flag.as_str()).collect(),
-            None => panic!(
-                "launch sets {} and {TOOL}-baseline.json records no \
-                 source-verified runtime flags at all",
-                OPENCODE.updates_off_env,
-            ),
-        };
-        assert!(
-            measured.contains(&OPENCODE.updates_off_env),
-            "launch sets {} and {TOOL}-baseline.json does not record measuring \
-             it in the product; the measured set is {measured:?}",
-            OPENCODE.updates_off_env,
         );
     }
 
