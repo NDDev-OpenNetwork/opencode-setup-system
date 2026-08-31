@@ -111,7 +111,7 @@
   ],
   "verified_at": "2026-08-29T10:56:16+00:00",
   "native_surfaces": {
-    "verified_at": "2026-08-27",
+    "verified_at": "2026-08-31",
     "config_home": "~/.config/opencode",
     "surfaces": [
       {
@@ -212,7 +212,8 @@
       {
         "path": "$HOME/.claude/skills",
         "reason": "OpenCode also reads Claude Code's skills directory for compatibility -- `.claude/skills/<name>/SKILL.md` is a path literal in the pinned binary, and the vendor lists it as *Global Claude-compatible*. Another product's home, never this provider's to own, and recorded because claude-setup-system owns `skills` there.",
-        "source": "https://opencode.ai/docs/skills/ and measured from the pinned artifact, digest verified before reading (opencode 1.18.24)"
+        "source": "https://opencode.ai/docs/skills/ and measured from the pinned artifact, digest verified before reading (opencode 1.18.24)",
+        "note": "**Re-asked at 1.18.25 on 2026-08-31.** The pinned `opencode-linux-x64-1.18.25.tgz` was fetched and its sha256 checked against this baseline's own artifact table before a byte was read; `.claude/skills` is still there. Searched with three controls -- `nddev_invented_reference_line`, `~/.nddev-not-a-home/skills/` and `NDDEV_INVENTED_SURFACE` -- each zero in the same bytes, so the search discriminates."
       },
       {
         "path": "opencode-runtime-state",
