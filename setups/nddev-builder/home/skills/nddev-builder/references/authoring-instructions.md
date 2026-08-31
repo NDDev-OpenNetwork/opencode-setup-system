@@ -17,6 +17,12 @@ second in the search order, after a project's own
 
 This row stays `page` because **a path built by joining a directory to a name at runtime never appears as a literal**, and that is the shape of every remaining one. Moving it off `page` needs the product run against a target and asked what it resolved, not a deeper grep.
 
+**Off `page` on 2026-08-31, and the near-miss is the part worth keeping.** The pinned 1.18.25 binary resolves its global instruction set as `[join(Global.config, "AGENTS.md"), join(Global.home, ".claude", "CLAUDE.md")]`, takes the **first** of those that exists and stops. The question was what `Global.config` is, and `debug paths` answers it wrongly: that command iterates the *static* path table, which is XDG-derived and prints `~/.config/opencode` even when `OPENCODE_CONFIG_DIR` is set. The `@opencode/Global` **service** is a different object and returns `config: OPENCODE_CONFIG_DIR ?? <static>`, so a target's `AGENTS.md` is the one read.
+
+Stopping at the command's output would have concluded this file is inert under provider launch -- which would have made `minimal`, whose whole content is this file, a posture that installs nothing. It is not. The reading was plausible, the command was real, and the object it prints is not the object the resolver uses.
+
+**And the second entry is another product's file.** With no `AGENTS.md` at the configuration home, this product reads another harness's global instruction file, `CLAUDE.md` under that product's own home in `$HOME`, as its own, unless `OPENCODE_DISABLE_CLAUDE_CODE_PROMPT` is set. Every posture here ships `AGENTS.md`, and it is first in the list, so ours wins wherever a setup is installed -- the fallback matters for a target this provider has not touched.
+
 ## Where the other harnesses keep theirs
 
 | harness | path | shape |

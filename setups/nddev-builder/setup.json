@@ -1,13 +1,15 @@
 {
   "schema_version": 1,
   "id": "nddev-builder",
-  "description": "A working floor plus the NDDev builder toolkit: what this harness owns, the lifecycle it performs, and the gate a change must pass.",
+  "description": "The harness-native full-auto posture plus the NDDev builder toolkit: autonomous implementation, exact product formats, lifecycle, verification and release handoff.",
   "sources": [
     "https://opencode.ai/docs/agents",
     "https://opencode.ai/docs/commands",
     "https://opencode.ai/docs/config",
+    "https://opencode.ai/docs/permissions",
     "https://opencode.ai/docs/plugins",
     "https://opencode.ai/docs/rules",
-    "https://opencode.ai/docs/skills"
+    "https://opencode.ai/docs/skills",
+    "https://opencode.ai/docs/tui"
   ]
 }
