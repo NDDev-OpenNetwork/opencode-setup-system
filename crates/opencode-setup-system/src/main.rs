@@ -34,7 +34,7 @@ pub const OPENCODE: Harness = Harness {
     launch_binding: LaunchBinding::Complete {
         how: "measured by asking the product which configuration it resolved",
     },
-    // Measured 2026-08-31 in the pinned 1.18.25 artifact. The automatic path
+    // Measured 2026-08-31 in the 1.18.25 artifact. The automatic path
     // reads `if (autoupdate === false || OPENCODE_DISABLE_AUTOUPDATE) return;`
     // -- the key and the variable are alternatives, and only the variable is
     // reachable from a launch this provider controls.
@@ -71,7 +71,7 @@ pub const OPENCODE: Harness = Harness {
         "plugins",
     ],
     // Five names the product reads and this provider does not own, each
-    // measured 2026-08-31 by running the pinned 1.18.25 binary against a
+    // measured 2026-08-31 by running the 1.18.25 binary against a
     // temporary home. Declared so `status` can say what it cannot decide.
     shadowing_names: &[
         Shadow {
