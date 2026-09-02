@@ -8,9 +8,9 @@
     "minimum_version_ref": "build/version.json:opencode_min"
   },
   "release": {
-    "github_release": "https://github.com/anomalyco/opencode/releases/tag/v1.18.25",
-    "github_release_api": "https://api.github.com/repos/anomalyco/opencode/releases/tags/v1.18.25",
-    "tag": "v1.18.25",
+    "github_release": "https://github.com/anomalyco/opencode/releases/tag/v1.18.26",
+    "github_release_api": "https://api.github.com/repos/anomalyco/opencode/releases/tags/v1.18.26",
+    "tag": "v1.18.26",
     "cli_signature": null,
     "cli_signature_note": "Official CLI zip/tar assets expose GitHub release asset SHA-256 digests but no PGP/cosign signature was published for the CLI assets."
   },
@@ -39,11 +39,11 @@
     "windows_note": "The vendor publishes `opencode-windows-x64` and `opencode-windows-arm64` and its own `opencode-ai` package declares `os: [darwin, linux, win32]`. Read from the npm registry on 2026-08-29, not from a page -- a third-party guide asserted that no windows-arm64 binary exists, and the registry has one at the same version as every other host.",
     "coverage_note": "Platform coverage is decided by `software_artifacts` and nothing else. This block held `windows` under unsupported until 2026-08-29, inherited from the retired nddev-*-app line, and by then it was false: the vendor ships Windows and this provider installs it. It said so for as long as it did because nothing in this repository read the block -- see `tools/transcribe_software.py --check`, which now compares it against the artifact table so the two cannot disagree again.",
     "x64_baseline_builds": {
-      "opencode-linux-x64": "identical",
       "opencode-darwin-x64": "identical",
+      "opencode-linux-x64": "identical",
       "opencode-windows-x64": "signature-only"
     },
-    "x64_baseline_builds_note": "The vendor publishes a `-baseline` package beside each x64 build, for CPUs without AVX2, and its own launcher tries them as a fallback list and keeps whichever answers `--version`. This provider selects one package per platform and never falls back, so a review filed every non-AVX2 x64 host as incorrectly covered. Measured 2026-08-31 against the pinned 1.18.25 packages, by comparing the program inside each pair rather than the tarballs: there is no second build. Linux and macOS are byte-identical to their `-baseline` siblings, and the Windows pair differs in 1694 bytes of 179MB -- an Authenticode countersignature three seconds later and the header fields signing rewrites -- with the same size and the same AVX2 instruction counts. So the finding is empty at this pin, and empty is a property of this release rather than of the design: `refresh_software_pins.py` now compares the pair at every refresh and says so when they stop matching, which is the point at which the host scope would need a CPU dimension. The distinction the vendor keeps the names for is the fallback list, not a second program.",
+    "x64_baseline_builds_note": "The vendor publishes a `-baseline` package beside each x64 build, for CPUs without AVX2, and its own launcher tries them as a fallback list and keeps whichever answers `--version`. This provider selects one package per platform and never falls back, so a review filed every non-AVX2 x64 host as incorrectly covered. Measured 2026-08-31 against the 1.18.25 packages, by comparing the program inside each pair rather than the tarballs: there is no second build. Linux and macOS are byte-identical to their `-baseline` siblings, and the Windows pair differs in 1694 bytes of 179MB -- an Authenticode countersignature three seconds later and the header fields signing rewrites -- with the same size and the same AVX2 instruction counts. So the finding is empty at this pin, and empty is a property of this release rather than of the design: `refresh_software_pins.py` now compares the pair at every refresh and says so when they stop matching, which is the point at which the host scope would need a CPU dimension. The distinction the vendor keeps the names for is the fallback list, not a second program.",
     "musl_precondition": "**The vendor publishes musl builds and this provider declares `linux-musl` unsupported, and the reason is not the vendor's.** Measured 2026-08-31: `opencode-linux-x64-musl` and `opencode-linux-arm64-musl` exist and differ from their glibc siblings in bytes, so they are real second builds rather than names -- unlike the `-baseline` pairs recorded above.\n\nWhat blocks the row is this provider's own release matrix: six targets, `{x86_64,aarch64}-unknown-linux-gnu`, `{x86_64,aarch64}-apple-darwin` and `{x86_64,aarch64}-pc-windows-msvc`, and no musl one. A musl artifact row would name a host on which the executable that installs it cannot start. **The order is fixed: a musl provider build first, then the artifact rows** -- the reverse is a declaration ahead of a capability, which this estate has shipped once already.\n\nNot verified on this workstation, and the reason is the environment rather than the code: `cargo` resolves from `~/.local/bin` ahead of rustup, so `--target x86_64-unknown-linux-musl` fails with *can't find crate for `std`* even with the target installed for the toolchain this repository fixes. The acceptance test is one line in CI, where no such shadow exists: build the seven providers for `x86_64-unknown-linux-musl`, run `provider-info` on an Alpine image, and only then add the rows."
   },
   "official_sources": {
@@ -100,7 +100,7 @@
       "permission": "allow"
     },
     "evaluation": "last-matching-rule",
-    "evaluation_note": "**The last matching rule decides, and a configured permission map is appended after the product's own.** Exercised 2026-08-31 by running the pinned 1.18.25 binary against a temporary home: `debug agent build` renders the resolved list, and with no configuration it opens `* -> allow`, then `doom_loop` and `external_directory` ask, `question`, `plan_enter` and `plan_exit` deny, and `read` asks for `*.env` and `*.env.*`. Anything written into `permission` appears after all of them: the `full-auto` catch-all lands at index 14 and `baseline`'s `edit`/`bash` asks at 14 and 15. The shipped binary selects with `findLast`, and the product's own ordering says the same thing -- the default agent carries `question -> deny` at index 5 and `question -> allow` at 12, which is only meaningful if the later one wins.\n\n**This was recorded backwards until 2026-08-31.** The `full-auto` description said seven rules were the product's own and no configuration moved them. The measurement behind it asked whether those seven were still in the resolved list, and they are -- every one, still printed -- rather than which row decides. The probe in the evidence lane could not have contradicted it either: it ran `debug config`, which echoes the configuration back, so it answered *was our file read* while the sentence claimed *and it changes nothing*. It now runs `debug agent build` with an ordered marker."
+    "evaluation_note": "**The last matching rule decides, and a configured permission map is appended after the product's own.** Exercised 2026-08-31 by running the 1.18.25 binary against a temporary home: `debug agent build` renders the resolved list, and with no configuration it opens `* -> allow`, then `doom_loop` and `external_directory` ask, `question`, `plan_enter` and `plan_exit` deny, and `read` asks for `*.env` and `*.env.*`. Anything written into `permission` appears after all of them: the `full-auto` catch-all lands at index 14 and `baseline`'s `edit`/`bash` asks at 14 and 15. The shipped binary selects with `findLast`, and the product's own ordering says the same thing -- the default agent carries `question -> deny` at index 5 and `question -> allow` at 12, which is only meaningful if the later one wins.\n\n**This was recorded backwards until 2026-08-31.** The `full-auto` description said seven rules were the product's own and no configuration moved them. The measurement behind it asked whether those seven were still in the resolved list, and they are -- every one, still printed -- rather than which row decides. The probe in the evidence lane could not have contradicted it either: it ran `debug config`, which echoes the configuration back, so it answered *was our file read* while the sentence claimed *and it changes nothing*. It now runs `debug agent build` with an ordered marker."
   },
   "source_verified_runtime_flags": [
     "OPENCODE_DISABLE_AUTOUPDATE",
@@ -109,7 +109,7 @@
     "OPENCODE_DISABLE_PROJECT_CONFIG",
     "OPENCODE_DISABLE_SHARE"
   ],
-  "verified_at": "2026-08-29T10:56:16+00:00",
+  "verified_at": "2026-09-02T00:40:45+00:00",
   "native_surfaces": {
     "verified_at": "2026-08-31",
     "config_home": "~/.config/opencode",
@@ -122,7 +122,7 @@
         "shape": "file",
         "source": "https://opencode.ai/docs/rules",
         "evidence": "bytes",
-        "note": "second in the search order, after a project's own\n\n**Searched in the product's own pinned bytes on 2026-08-29 and not found, which argues nothing either way.** Fixed-string, anchored to this product's configuration home -- the bare leaf name is in every one of these binaries and proves nothing, so only the anchored form counts. An invented path was searched in the same run and was also absent, so the search discriminates.\n\nThis row stays `page` because **a path built by joining a directory to a name at runtime never appears as a literal**, and that is the shape of every remaining one. Moving it off `page` needs the product run against a target and asked what it resolved, not a deeper grep.\n\n**Off `page` on 2026-08-31, and the near-miss is the part worth keeping.** The pinned 1.18.25 binary resolves its global instruction set as `[join(Global.config, \"AGENTS.md\"), join(Global.home, \".claude\", \"CLAUDE.md\")]`, takes the **first** of those that exists and stops. The question was what `Global.config` is, and `debug paths` answers it wrongly: that command iterates the *static* path table, which is XDG-derived and prints `~/.config/opencode` even when `OPENCODE_CONFIG_DIR` is set. The `@opencode/Global` **service** is a different object and returns `config: OPENCODE_CONFIG_DIR ?? <static>`, so a target's `AGENTS.md` is the one read.\n\nStopping at the command's output would have concluded this file is inert under provider launch -- which would have made `minimal`, whose whole content is this file, a posture that installs nothing. It is not. The reading was plausible, the command was real, and the object it prints is not the object the resolver uses.\n\n**And the second entry is another product's file.** With no `AGENTS.md` at the configuration home, this product reads another harness's global instruction file, `CLAUDE.md` under that product's own home in `$HOME`, as its own, unless `OPENCODE_DISABLE_CLAUDE_CODE_PROMPT` is set. Every posture here ships `AGENTS.md`, and it is first in the list, so ours wins wherever a setup is installed -- the fallback matters for a target this provider has not touched."
+        "note": "second in the search order, after a project's own\n\n**Searched in the product's own pinned bytes on 2026-08-29 and not found, which argues nothing either way.** Fixed-string, anchored to this product's configuration home -- the bare leaf name is in every one of these binaries and proves nothing, so only the anchored form counts. An invented path was searched in the same run and was also absent, so the search discriminates.\n\nThis row stays `page` because **a path built by joining a directory to a name at runtime never appears as a literal**, and that is the shape of every remaining one. Moving it off `page` needs the product run against a target and asked what it resolved, not a deeper grep.\n\n**Off `page` on 2026-08-31, and the near-miss is the part worth keeping.** The 1.18.25 binary resolves its global instruction set as `[join(Global.config, \"AGENTS.md\"), join(Global.home, \".claude\", \"CLAUDE.md\")]`, takes the **first** of those that exists and stops. The question was what `Global.config` is, and `debug paths` answers it wrongly: that command iterates the *static* path table, which is XDG-derived and prints `~/.config/opencode` even when `OPENCODE_CONFIG_DIR` is set. The `@opencode/Global` **service** is a different object and returns `config: OPENCODE_CONFIG_DIR ?? <static>`, so a target's `AGENTS.md` is the one read.\n\nStopping at the command's output would have concluded this file is inert under provider launch -- which would have made `minimal`, whose whole content is this file, a posture that installs nothing. It is not. The reading was plausible, the command was real, and the object it prints is not the object the resolver uses.\n\n**And the second entry is another product's file.** With no `AGENTS.md` at the configuration home, this product reads another harness's global instruction file, `CLAUDE.md` under that product's own home in `$HOME`, as its own, unless `OPENCODE_DISABLE_CLAUDE_CODE_PROMPT` is set. Every posture here ships `AGENTS.md`, and it is first in the list, so ours wins wherever a setup is installed -- the fallback matters for a target this provider has not touched."
       },
       {
         "path": "opencode.json",
@@ -132,7 +132,7 @@
         "shape": "file",
         "source": "https://opencode.ai/docs/config; route measured by running `debug config` against a temporary home",
         "evidence": "ran",
-        "note": "MCP servers live here under the mcp key; a key inside a file is not a projection surface, so mcp is not declared. The route was confirmed 2026-08-29 by running the pinned 1.18.25 bundle against a temporary configuration home: a file written at <home>/opencode/opencode.json came back from `debug config`, and an invented key placed in the same file did not -- which is what separates a key the build reads from one it drops in silence, and is the control the run needed to prove anything.\n\n**A second spelling this product reads and this provider does not own.** Measured 2026-08-31 by running the pinned 1.18.25 binary against a temporary home: an `opencode.jsonc` placed beside our `opencode.json` in the same target is the one that takes effect -- `debug config` returned the JSONC file's value, not ours. The product's own candidate list joins the two in that order and the later one wins, so a target whose owned bytes are clean can be running configuration this provider never wrote. Owning the second spelling is not the answer, because a setup could then install two files that disagree, and deleting a file somebody else put there is not either. What is missing is that nothing here looks."
+        "note": "MCP servers live here under the mcp key; a key inside a file is not a projection surface, so mcp is not declared. The route was confirmed 2026-08-29 by running the 1.18.25 bundle against a temporary configuration home: a file written at <home>/opencode/opencode.json came back from `debug config`, and an invented key placed in the same file did not -- which is what separates a key the build reads from one it drops in silence, and is the control the run needed to prove anything.\n\n**A second spelling this product reads and this provider does not own.** Measured 2026-08-31 by running the 1.18.25 binary against a temporary home: an `opencode.jsonc` placed beside our `opencode.json` in the same target is the one that takes effect -- `debug config` returned the JSONC file's value, not ours. The product's own candidate list joins the two in that order and the later one wins, so a target whose owned bytes are clean can be running configuration this provider never wrote. Owning the second spelling is not the answer, because a setup could then install two files that disagree, and deleting a file somebody else put there is not either. What is missing is that nothing here looks."
       },
       {
         "path": "skills",
@@ -180,7 +180,7 @@
         "shape": "file",
         "source": "https://opencode.ai/docs/tui",
         "evidence": "page",
-        "note": "keybinds, theme, attention and sounds, deliberately separate from opencode.json, which the same documentation describes as server and runtime behaviour; the setting route stays opencode.json\n\n**Searched in the product's own pinned bytes on 2026-08-29 and not found, which argues nothing either way.** Fixed-string, anchored to this product's configuration home -- the bare leaf name is in every one of these binaries and proves nothing, so only the anchored form counts. An invented path was searched in the same run and was also absent, so the search discriminates.\n\nThis row stays `page` because **a path built by joining a directory to a name at runtime never appears as a literal**, and that is the shape of every remaining one. Moving it off `page` needs the product run against a target and asked what it resolved, not a deeper grep.\n\n**There is no `tui.jsonc`, and the symmetry was asserted before it was checked.** A review of this provider filed the JSONC alias for this file as a finding of equal standing with `opencode.json`'s. The pinned 1.18.25 binary carries `tui.json` eight times and the JSONC spelling not once. The alias is real for the main configuration and absent for this one; a neighbour's property is not this file's.\n\n**Still `page` after a pass at it on 2026-08-31, and saying so rather than promoting it on a neighbour's evidence.** What was established: the product *writes* this file. A configuration carrying `theme`, `keybinds` or `tui` that has no `tui.json` beside it gets one written at `join(dirname(<config file>), \"tui.json\")`, and the config files include the ones in a resource directory -- so a consumer bundle setting a theme can make the product create a file this provider owns. What was **not** established is the read path from a target: it was looked for in the pinned bytes and not found, and a single `debug config` run with `theme` set did not produce the file either, so the migration needs something a read-only command does not reach. Two things absent is not one thing proven."
+        "note": "keybinds, theme, attention and sounds, deliberately separate from opencode.json, which the same documentation describes as server and runtime behaviour; the setting route stays opencode.json\n\n**Searched in the product's own pinned bytes on 2026-08-29 and not found, which argues nothing either way.** Fixed-string, anchored to this product's configuration home -- the bare leaf name is in every one of these binaries and proves nothing, so only the anchored form counts. An invented path was searched in the same run and was also absent, so the search discriminates.\n\nThis row stays `page` because **a path built by joining a directory to a name at runtime never appears as a literal**, and that is the shape of every remaining one. Moving it off `page` needs the product run against a target and asked what it resolved, not a deeper grep.\n\n**There is no `tui.jsonc`, and the symmetry was asserted before it was checked.** A review of this provider filed the JSONC alias for this file as a finding of equal standing with `opencode.json`'s. The 1.18.25 binary carries `tui.json` eight times and the JSONC spelling not once. The alias is real for the main configuration and absent for this one; a neighbour's property is not this file's.\n\n**Still `page` after a pass at it on 2026-08-31, and saying so rather than promoting it on a neighbour's evidence.** What was established: the product *writes* this file. A configuration carrying `theme`, `keybinds` or `tui` that has no `tui.json` beside it gets one written at `join(dirname(<config file>), \"tui.json\")`, and the config files include the ones in a resource directory -- so a consumer bundle setting a theme can make the product create a file this provider owns. What was **not** established is the read path from a target: it was looked for in the pinned bytes and not found, and a single `debug config` run with `theme` set did not produce the file either, so the migration needs something a read-only command does not reach. Two things absent is not one thing proven."
       }
     ],
     "declined": [
@@ -217,38 +217,38 @@
       },
       {
         "path": "opencode-runtime-state",
-        "reason": "One row for what the product writes **outside its configuration home entirely**, because it writes to three other roots and none of them had a row.\n\nMeasured 2026-08-28 by running the pinned 1.18.25 binary in a clean `HOME` with every XDG variable cleared. A bare `--version` created:\n  * `~/.local/share/opencode/{log,repos}`\n  * `~/.local/state/opencode`\n  * `~/.cache/opencode/bin`\n\nThe product is XDG-native and this is the rest of that specification: the config home this provider targets is one of four roots it uses, not the only one. Confirmed at the line -- its `Global` module reads `XDG_DATA_HOME`, `XDG_CONFIG_HOME`, `XDG_STATE_HOME` and `XDG_CACHE_HOME`, each falling back to the conventional directory under the home, and joins `\"opencode\"` to all four.\n\n**None of them gets a row of its own**, because every recorded path here is relative to the target and these are relative to roots this provider never evaluates against; the guard that enforces it refuses such a row, correctly. Recorded in this sentence instead, the same way antigravity's `~/.cache/ms-playwright-go` is, so a reader looking for everything the product writes does not stop at `~/.config/opencode` and get a wrong answer.\n\n**And it settles a search result that says otherwise.** Several pages claim opencode uses `%APPDATA%` on Windows; they are about third-party plugins rather than the vendor. The product's own resolver has **no `win32` branch at all**, so `~/.config/opencode` is correct on all three systems and this baseline's `config_home` stands.",
-        "source": "measured by running the pinned 1.18.25 binary in a clean HOME, and confirmed at the line in its own Global module, 2026-08-28"
+        "reason": "One row for what the product writes **outside its configuration home entirely**, because it writes to three other roots and none of them had a row.\n\nMeasured 2026-08-28 by running the 1.18.25 binary in a clean `HOME` with every XDG variable cleared. A bare `--version` created:\n  * `~/.local/share/opencode/{log,repos}`\n  * `~/.local/state/opencode`\n  * `~/.cache/opencode/bin`\n\nThe product is XDG-native and this is the rest of that specification: the config home this provider targets is one of four roots it uses, not the only one. Confirmed at the line -- its `Global` module reads `XDG_DATA_HOME`, `XDG_CONFIG_HOME`, `XDG_STATE_HOME` and `XDG_CACHE_HOME`, each falling back to the conventional directory under the home, and joins `\"opencode\"` to all four.\n\n**None of them gets a row of its own**, because every recorded path here is relative to the target and these are relative to roots this provider never evaluates against; the guard that enforces it refuses such a row, correctly. Recorded in this sentence instead, the same way antigravity's `~/.cache/ms-playwright-go` is, so a reader looking for everything the product writes does not stop at `~/.config/opencode` and get a wrong answer.\n\n**And it settles a search result that says otherwise.** Several pages claim opencode uses `%APPDATA%` on Windows; they are about third-party plugins rather than the vendor. The product's own resolver has **no `win32` branch at all**, so `~/.config/opencode` is correct on all three systems and this baseline's `config_home` stands.",
+        "source": "measured by running the 1.18.25 binary in a clean HOME, and confirmed at the line in its own Global module, 2026-08-28"
       },
       {
         "path": "agent",
-        "reason": "Opencode accepts the singular and the plural spelling of this directory. Its own embedded reference, carried in the pinned 1.18.25 binary, writes the global row as `~/.config/opencode/agent(s)/<name>.md` and the project row as `.opencode/agent/<name>.md` or `.opencode/agents/<name>.md`. This provider writes and owns the plural only. Owning both would let one target hold two definitions of the same component that disagree, with the product reading one and this provider reporting the other, and which of the two wins where both exist is not documented -- so a target holding the singular is reported rather than resolved. Recorded here because without a row the next reader repeats the search, and because a directory the product reads and this provider does not own is exactly what this block is for.",
-        "source": "measured in the pinned 1.18.25 bundle, whose bytes match this baseline's own sha256 -- the product carries its own reference table and it names both spellings"
+        "reason": "Opencode accepts the singular and the plural spelling of this directory. Its own embedded reference, carried in the 1.18.25 binary, writes the global row as `~/.config/opencode/agent(s)/<name>.md` and the project row as `.opencode/agent/<name>.md` or `.opencode/agents/<name>.md`. This provider writes and owns the plural only. Owning both would let one target hold two definitions of the same component that disagree, with the product reading one and this provider reporting the other, and which of the two wins where both exist is not documented -- so a target holding the singular is reported rather than resolved. Recorded here because without a row the next reader repeats the search, and because a directory the product reads and this provider does not own is exactly what this block is for.",
+        "source": "measured in the 1.18.25 bundle, whose bytes match this baseline's own sha256 -- the product carries its own reference table and it names both spellings"
       },
       {
         "path": "command",
-        "reason": "Opencode accepts the singular and the plural spelling of this directory. Its own embedded reference, carried in the pinned 1.18.25 binary, writes the global row as `~/.config/opencode/command(s)/<name>.md` and the project row as `.opencode/command/<name>.md` or `.opencode/commands/<name>.md`. This provider writes and owns the plural only. Owning both would let one target hold two definitions of the same component that disagree, with the product reading one and this provider reporting the other, and which of the two wins where both exist is not documented -- so a target holding the singular is reported rather than resolved. Recorded here because without a row the next reader repeats the search, and because a directory the product reads and this provider does not own is exactly what this block is for.",
-        "source": "measured in the pinned 1.18.25 bundle, whose bytes match this baseline's own sha256 -- the product carries its own reference table and it names both spellings"
+        "reason": "Opencode accepts the singular and the plural spelling of this directory. Its own embedded reference, carried in the 1.18.25 binary, writes the global row as `~/.config/opencode/command(s)/<name>.md` and the project row as `.opencode/command/<name>.md` or `.opencode/commands/<name>.md`. This provider writes and owns the plural only. Owning both would let one target hold two definitions of the same component that disagree, with the product reading one and this provider reporting the other, and which of the two wins where both exist is not documented -- so a target holding the singular is reported rather than resolved. Recorded here because without a row the next reader repeats the search, and because a directory the product reads and this provider does not own is exactly what this block is for.",
+        "source": "measured in the 1.18.25 bundle, whose bytes match this baseline's own sha256 -- the product carries its own reference table and it names both spellings"
       },
       {
         "path": "skill",
-        "reason": "Opencode accepts the singular and the plural spelling of this directory. Its own embedded reference, carried in the pinned 1.18.25 binary, writes the global row as `~/.config/opencode/skill(s)/<name>/SKILL.md` and the project row as `.opencode/skill/<name>/SKILL.md` or `.opencode/skills/<name>/SKILL.md`. This provider writes and owns the plural only. Owning both would let one target hold two definitions of the same component that disagree, with the product reading one and this provider reporting the other, and which of the two wins where both exist is not documented -- so a target holding the singular is reported rather than resolved. Recorded here because without a row the next reader repeats the search, and because a directory the product reads and this provider does not own is exactly what this block is for.",
-        "source": "measured in the pinned 1.18.25 bundle, whose bytes match this baseline's own sha256 -- the product carries its own reference table and it names both spellings"
+        "reason": "Opencode accepts the singular and the plural spelling of this directory. Its own embedded reference, carried in the 1.18.25 binary, writes the global row as `~/.config/opencode/skill(s)/<name>/SKILL.md` and the project row as `.opencode/skill/<name>/SKILL.md` or `.opencode/skills/<name>/SKILL.md`. This provider writes and owns the plural only. Owning both would let one target hold two definitions of the same component that disagree, with the product reading one and this provider reporting the other, and which of the two wins where both exist is not documented -- so a target holding the singular is reported rather than resolved. Recorded here because without a row the next reader repeats the search, and because a directory the product reads and this provider does not own is exactly what this block is for.",
+        "source": "measured in the 1.18.25 bundle, whose bytes match this baseline's own sha256 -- the product carries its own reference table and it names both spellings"
       },
       {
         "path": "plugin",
-        "reason": "Opencode accepts the singular and the plural spelling of this directory. Its own embedded reference, carried in the pinned 1.18.25 binary, writes the global row as `~/.config/opencode/plugin(s)/<name>/` and the project row as `.opencode/plugin/<name>/` or `.opencode/plugins/<name>/`. This provider writes and owns the plural only. Owning both would let one target hold two definitions of the same component that disagree, with the product reading one and this provider reporting the other, and which of the two wins where both exist is not documented -- so a target holding the singular is reported rather than resolved. Recorded here because without a row the next reader repeats the search, and because a directory the product reads and this provider does not own is exactly what this block is for.",
-        "source": "measured in the pinned 1.18.25 bundle, whose bytes match this baseline's own sha256 -- the product carries its own reference table and it names both spellings"
+        "reason": "Opencode accepts the singular and the plural spelling of this directory. Its own embedded reference, carried in the 1.18.25 binary, writes the global row as `~/.config/opencode/plugin(s)/<name>/` and the project row as `.opencode/plugin/<name>/` or `.opencode/plugins/<name>/`. This provider writes and owns the plural only. Owning both would let one target hold two definitions of the same component that disagree, with the product reading one and this provider reporting the other, and which of the two wins where both exist is not documented -- so a target holding the singular is reported rather than resolved. Recorded here because without a row the next reader repeats the search, and because a directory the product reads and this provider does not own is exactly what this block is for.",
+        "source": "measured in the 1.18.25 bundle, whose bytes match this baseline's own sha256 -- the product carries its own reference table and it names both spellings"
       },
       {
         "path": "managed-config",
-        "reason": "Not a path in the target, and named without an extension for that reason: the managed configuration directory is a **system** path, one per operating system, and every recorded path here is relative to the target.\n\n  * Linux — `/etc/opencode/`\n  * macOS — `/Library/Application Support/opencode/`\n  * Windows — `%ProgramData%\\\\opencode`\n\nAll three are in the pinned 1.18.25 bundle's own emitted source, in one switch: `case\"darwin\": return \"/Library/Application Support/opencode\"; case\"win32\": return join(process.env.ProgramData||\"C:\\\\ProgramData\",\"opencode\"); default: return \"/etc/opencode\"`. macOS additionally reads a managed plist from the `ai.opencode.managed` preference domain, deployable by MDM, which the same bundle carries as `parseManagedPlist` and `managedPreferences`.\n\n**It bears on the `full-auto` posture**, the same way the managed policy does on the harness next door. An administrator's `opencode.json` there is loaded at the highest priority tier and overrides everything, so this provider can install, verify and restore a permissive posture cleanly on a managed machine and change nothing about what the product actually permits. The setup is not wrong and the target is not wrong; a higher layer wins.\n\nRecorded and never touched: it needs root or Administrator to write, it is not under the configuration home this provider is given, and a provider that edited an organisation's policy would be doing the one thing this estate refuses everywhere else.\n\nThe user configuration home is **not** per-OS, which is why only this row is. The same bundle resolves it as `XDG_CONFIG_HOME || ~/.config` joined with the application name, with no platform branch at all.",
-        "source": "https://opencode.ai/docs/config; measured in the pinned 1.18.25 bundle, whose bytes match this baseline's own sha256"
+        "reason": "Not a path in the target, and named without an extension for that reason: the managed configuration directory is a **system** path, one per operating system, and every recorded path here is relative to the target.\n\n  * Linux — `/etc/opencode/`\n  * macOS — `/Library/Application Support/opencode/`\n  * Windows — `%ProgramData%\\\\opencode`\n\nAll three are in the 1.18.25 bundle's own emitted source, in one switch: `case\"darwin\": return \"/Library/Application Support/opencode\"; case\"win32\": return join(process.env.ProgramData||\"C:\\\\ProgramData\",\"opencode\"); default: return \"/etc/opencode\"`. macOS additionally reads a managed plist from the `ai.opencode.managed` preference domain, deployable by MDM, which the same bundle carries as `parseManagedPlist` and `managedPreferences`.\n\n**It bears on the `full-auto` posture**, the same way the managed policy does on the harness next door. An administrator's `opencode.json` there is loaded at the highest priority tier and overrides everything, so this provider can install, verify and restore a permissive posture cleanly on a managed machine and change nothing about what the product actually permits. The setup is not wrong and the target is not wrong; a higher layer wins.\n\nRecorded and never touched: it needs root or Administrator to write, it is not under the configuration home this provider is given, and a provider that edited an organisation's policy would be doing the one thing this estate refuses everywhere else.\n\nThe user configuration home is **not** per-OS, which is why only this row is. The same bundle resolves it as `XDG_CONFIG_HOME || ~/.config` joined with the application name, with no platform branch at all.",
+        "source": "https://opencode.ai/docs/config; measured in the 1.18.25 bundle, whose bytes match this baseline's own sha256"
       },
       {
         "path": "mcp_config.json",
         "reason": "MCP servers are the `mcp` key inside `opencode.json` -- `{\"mcp\": {\"<name>\": {\"type\": \"local\", \"command\": [...]}}}` -- confirmed on the vendor's MCP page 2026-08-29 and in the product's own built-in `customize-opencode` skill. That file is owned here and written and restored whole, so MCP is covered by the `setting` kind. **A key inside a file is not a projection surface.** No separate MCP file exists under the config home.",
-        "source": "https://opencode.ai/docs/mcp-servers/; and the product's own built-in customize-opencode skill, read from the pinned 1.18.25 artifact"
+        "source": "https://opencode.ai/docs/mcp-servers/; and the product's own built-in customize-opencode skill, read from the 1.18.25 artifact"
       },
       {
         "path": "hooks.json",
@@ -277,7 +277,7 @@
               "skill"
             ],
             "shape": "directory",
-            "source": "https://opencode.ai/docs/skills/, and measured by running the pinned 1.18.25 product with `debug skill` against a temporary HOME, 2026-08-29",
+            "source": "https://opencode.ai/docs/skills/, and measured by running the 1.18.25 product with `debug skill` against a temporary HOME, 2026-08-29",
             "evidence": "ran",
             "note": "**Run, not read.** The pinned `opencode-linux-x64-1.18.25.tgz` was fetched, its digest checked against the artifact table, and the binary driven with `opencode debug skill` -- a credential-free command that prints the resolved skill list as JSON. A `SKILL.md` at `$HOME/.agents/skills/nddev-user-root-probe/` is listed with its full path.\n\n**With a control.** A second skill at `$HOME/.agents-not-a-root/skills/` -- a sibling root no page names -- is absent from the same listing, so the product reads the documented root rather than scanning `$HOME` broadly.\n\nThe product corroborates it in its own words: its built-in `customize-opencode` skill tabulates *External skills (auto-loaded): `~/.claude/skills/<name>/SKILL.md`, `~/.agents/skills/<name>/SKILL.md`*, and names `OPENCODE_DISABLE_EXTERNAL_SKILLS` and `OPENCODE_DISABLE_CLAUDE_CODE_SKILLS` as the switches that turn those two scans off.\n\nThe one root in this estate that belongs to a convention rather than to a product. `$HOME/.agents/skills` is a *sibling* of this product's configuration home, not a child, so nothing declared against this provider's own target can reach it -- that is what `user_root` exists for.\n\n**Owning a shared root, and the reason this record used to decline it.** Five of the seven products read this root, and the decline said: *a namespace is removed whole, so a second declaration would make either provider's remove take the other's skills.* That sentence was true when it was written and stopped being true when `written_paths` shipped -- `remove` under this scope takes the files this provider recorded writing and refuses rather than widening when it cannot read the record, and each harness carries its own state file, so they coexist under one root. The reason was not re-read when the thing it described changed.\n\nRelative to this scope's own root the path is `skills`, not `.agents/skills`: the root is what the scope names, and writing it into the path again would put the skills at `~/.agents/.agents/skills`."
           }
@@ -290,6 +290,51 @@
     }
   },
   "software_artifacts": {
+    "command": "opencode",
+    "shape": "gzip-tar",
+    "platforms": {
+      "linux/arm64": {
+        "url": "https://registry.npmjs.org/opencode-linux-arm64/-/opencode-linux-arm64-1.18.26.tgz",
+        "bytes": 59947971,
+        "sha256": "sha256:5e0cc6c6c48d6629c8f5d3d5c9f9670e8dac7ba14d295801bb3f6a783a8f841b",
+        "member": "package/bin/opencode"
+      },
+      "linux/x86_64": {
+        "url": "https://registry.npmjs.org/opencode-linux-x64/-/opencode-linux-x64-1.18.26.tgz",
+        "bytes": 60169535,
+        "sha256": "sha256:990d8b07111517a78ba779709ff8f438e0dcf2a7fb66d36df7507c8e93358f02",
+        "member": "package/bin/opencode"
+      },
+      "macos/arm64": {
+        "url": "https://registry.npmjs.org/opencode-darwin-arm64/-/opencode-darwin-arm64-1.18.26.tgz",
+        "bytes": 45942652,
+        "sha256": "sha256:d9c09ba039dd62f983fc66c65777910f20eead2c4e30cbff888f26d640607e15",
+        "member": "package/bin/opencode"
+      },
+      "macos/x86_64": {
+        "url": "https://registry.npmjs.org/opencode-darwin-x64/-/opencode-darwin-x64-1.18.26.tgz",
+        "bytes": 48118308,
+        "sha256": "sha256:dff2571b3ad3f04dff7f0555bf4e679615c1f70afb35258f139d22a491da57e3",
+        "member": "package/bin/opencode"
+      },
+      "windows/arm64": {
+        "url": "https://registry.npmjs.org/opencode-windows-arm64/-/opencode-windows-arm64-1.18.26.tgz",
+        "bytes": 58398040,
+        "sha256": "sha256:419799338b25d5e62a393136c61166ddf0e78229b784daf0a9fabfb0df66eb9f",
+        "member": "package/bin/opencode.exe"
+      },
+      "windows/x86_64": {
+        "url": "https://registry.npmjs.org/opencode-windows-x64/-/opencode-windows-x64-1.18.26.tgz",
+        "bytes": 60082922,
+        "sha256": "sha256:fca4106836f9ca9d9485d010a247d0d928eecfff972b9019ff522b6ba9885934",
+        "member": "package/bin/opencode.exe"
+      }
+    },
+    "version": "1.18.26",
+    "verified_at": "2026-09-02T00:40:45+00:00"
+  },
+  "setup_catalogue_digest": "sha256:2812d268ce40bb989667dcd8afb5632ada2aa73882608decbbed752731d399a9",
+  "previous_software_artifacts": {
     "command": "opencode",
     "shape": "gzip-tar",
     "platforms": {
@@ -333,50 +378,5 @@
     "version": "1.18.25",
     "verified_at": "2026-08-29T10:56:16+00:00"
   },
-  "setup_catalogue_digest": "sha256:6f26cf2c494e1d660d6fd3117d8448d0da7733ef43ac7200fb5ef5243145306e",
-  "previous_software_artifacts": {
-    "command": "opencode",
-    "shape": "gzip-tar",
-    "platforms": {
-      "linux/arm64": {
-        "url": "https://registry.npmjs.org/opencode-linux-arm64/-/opencode-linux-arm64-1.18.24.tgz",
-        "bytes": 59965342,
-        "sha256": "sha256:23c9aebc2e2860989b4513bd2dc42f4537f8168ee00625ee87ac7c36175afe97",
-        "member": "package/bin/opencode"
-      },
-      "linux/x86_64": {
-        "url": "https://registry.npmjs.org/opencode-linux-x64/-/opencode-linux-x64-1.18.24.tgz",
-        "bytes": 60179731,
-        "sha256": "sha256:3862620ef10f1f6c536e36a278a36a02aab8081953a9df620180544bc316aeb2",
-        "member": "package/bin/opencode"
-      },
-      "macos/arm64": {
-        "url": "https://registry.npmjs.org/opencode-darwin-arm64/-/opencode-darwin-arm64-1.18.24.tgz",
-        "bytes": 45945938,
-        "sha256": "sha256:f148c5a5dee4469d60acd45c110f672e40a071932a0f0b16fdf0a44343d3a6d0",
-        "member": "package/bin/opencode"
-      },
-      "macos/x86_64": {
-        "url": "https://registry.npmjs.org/opencode-darwin-x64/-/opencode-darwin-x64-1.18.24.tgz",
-        "bytes": 48128468,
-        "sha256": "sha256:359e9bda41ded7a46724934567a112826203831671804bf5975143d7b7cdee3e",
-        "member": "package/bin/opencode"
-      },
-      "windows/arm64": {
-        "url": "https://registry.npmjs.org/opencode-windows-arm64/-/opencode-windows-arm64-1.18.24.tgz",
-        "bytes": 58410484,
-        "sha256": "sha256:7e0db5c40ecd51c44969627bdc6ea168b1bd1cb29dc89b2b364aa884590d896f",
-        "member": "package/bin/opencode.exe"
-      },
-      "windows/x86_64": {
-        "url": "https://registry.npmjs.org/opencode-windows-x64/-/opencode-windows-x64-1.18.24.tgz",
-        "bytes": 60100741,
-        "sha256": "sha256:a936a3a13d1e41b9f14ce74803414c14a07f7d8b4ce4e31e755920dcc7b5933e",
-        "member": "package/bin/opencode.exe"
-      }
-    },
-    "version": "1.18.24",
-    "verified_at": "2026-08-28T04:45:01+00:00"
-  },
-  "source_verified_runtime_flags_note": "All five read out of the pinned 1.18.25 binary on 2026-08-31 -- the whole `OPENCODE_*` set is in its string table, and these are the five this provider has a reason to name. **Nothing in this repository read this block until now.** It is the same shape as the `windows` row that sat under `unsupported` for weeks while this provider installed Windows: a true-when-written list with no reader, which is the condition a stale fact needs. `native_declaration_names_the_switch_it_sets` now ties `updates_off_env` to this list, so the declaration and the measurement cannot drift apart in silence."
+  "source_verified_runtime_flags_note": "All five read out of the 1.18.25 binary on 2026-08-31 -- the whole `OPENCODE_*` set is in its string table, and these are the five this provider has a reason to name. **Nothing in this repository read this block until now.** It is the same shape as the `windows` row that sat under `unsupported` for weeks while this provider installed Windows: a true-when-written list with no reader, which is the condition a stale fact needs. `native_declaration_names_the_switch_it_sets` now ties `updates_off_env` to this list, so the declaration and the measurement cannot drift apart in silence."
 }
