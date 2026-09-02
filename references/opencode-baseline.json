@@ -378,5 +378,17 @@
     "version": "1.18.25",
     "verified_at": "2026-08-29T10:56:16+00:00"
   },
-  "source_verified_runtime_flags_note": "All five read out of the 1.18.25 binary on 2026-08-31 -- the whole `OPENCODE_*` set is in its string table, and these are the five this provider has a reason to name. **Nothing in this repository read this block until now.** It is the same shape as the `windows` row that sat under `unsupported` for weeks while this provider installed Windows: a true-when-written list with no reader, which is the condition a stale fact needs. `native_declaration_names_the_switch_it_sets` now ties `updates_off_env` to this list, so the declaration and the measurement cannot drift apart in silence."
+  "source_verified_runtime_flags_note": "All five read out of the 1.18.25 binary on 2026-08-31 -- the whole `OPENCODE_*` set is in its string table, and these are the five this provider has a reason to name. **Nothing in this repository read this block until now.** It is the same shape as the `windows` row that sat under `unsupported` for weeks while this provider installed Windows: a true-when-written list with no reader, which is the condition a stale fact needs. `native_declaration_names_the_switch_it_sets` now ties `updates_off_env` to this list, so the declaration and the measurement cannot drift apart in silence.",
+  "surface_presence": {
+    "measured_at": "2026-09-02",
+    "artifact": "https://registry.npmjs.org/opencode-linux-x64/-/opencode-linux-x64-1.18.26.tgz",
+    "artifact_sha256": "sha256:990d8b07111517a78ba779709ff8f438e0dcf2a7fb66d36df7507c8e93358f02",
+    "product_version": "1.18.26",
+    "declared_surfaces": 8,
+    "present": 8,
+    "absent": [],
+    "control": "zzq-invented-surface-nobody-ships",
+    "control_hits": 0,
+    "method": "Every namespace this harness declares, global and scoped, searched as a fixed string in the artifact the current pin names, digest verified before reading; both the declared path and its last segment counted, because a product that composes a path by joining segments never spells the whole of it. A count here is a lower bound and not a routing proof -- what it answers is whether a surface vanished from the product under a version bump, which five of the seven took on 2026-09-02. The invented control was searched in the same run and found nowhere, so the search discriminates."
+  }
 }
