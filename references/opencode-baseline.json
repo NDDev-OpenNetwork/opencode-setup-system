@@ -333,7 +333,7 @@
     "version": "1.18.27",
     "verified_at": "2026-09-03T14:13:03+00:00"
   },
-  "setup_catalogue_digest": "sha256:867fc17609fd2da2c2787671cead513478a36d0d596acd33a8b07b4600f82eba",
+  "setup_catalogue_digest": "sha256:49c6d48204396412493e4b7c8d2e5463bd50ccda720076a952e16e8b3d089644",
   "previous_software_artifacts": {
     "command": "opencode",
     "shape": "gzip-tar",

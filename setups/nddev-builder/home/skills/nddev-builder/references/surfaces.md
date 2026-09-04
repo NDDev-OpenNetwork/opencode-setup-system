@@ -1,8 +1,8 @@
 # What This Harness Owns
 
-Generated from `references/opencode-baseline.json` by
-`tools/build_nddev_builder.py`. Do not edit: the next render overwrites
-it, and the baseline is where a correction belongs.
+Generated from `references/opencode-baseline.json`. Do not edit:
+the next render overwrites it, and the baseline is where a correction
+belongs.
 
 Every row below was decided by a source, and the source is named. Where
 this file and the binary disagree, the binary is right -- ask it with
@@ -14,7 +14,7 @@ this file and the binary disagree, the binary is right -- ask it with
 ## The configuration file
 
 `opencode.json` is **jsonc**, and the parser accepts comments.
-The vendor publishes a schema at <https://opencode.ai/config.json>, and `tools/validate_setup_schemas.py` checks every shipped file that names it.
+The vendor publishes a schema at <https://opencode.ai/config.json>, and every shipped file that names it is checked against that schema.
 
 **JSONC**, at both spellings -- line comments, block comments and trailing commas are all accepted, and the product's own bundle uses a `jsonc-parser` with `formattingOptions`. Strict JSON is a subset, so what this repository writes is valid; the distinction matters for a file a *person* has edited, which a backup will capture with its comments intact.
 
