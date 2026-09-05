@@ -11,5 +11,52 @@
     "https://opencode.ai/docs/rules",
     "https://opencode.ai/docs/skills",
     "https://opencode.ai/docs/tui"
+  ],
+  "setup_stable_id": "setup_01M15EPCN05VTEYD18SY089ZMX",
+  "setup_version": "1.5",
+  "setup_passport_digest": "sha256:b79eba312e6d58504c74fe654039fa3f66579fa8f47c56ad7220cd87c7170b73",
+  "component_refs": [
+    {
+      "stable_id": "component_01M15EP4J086PJTZA6QD66YVA9",
+      "version": "1.4",
+      "passport_digest": "sha256:639159c4b6d3c14443f2c98c2b1609ebc677cf6b2f5aec66f40fa8232ae7034a",
+      "adaptation_id": "adaptation_7945acfb6925917957f50584c26c5d2fb98b53a22e006e8cf9a85ae49610f5e9"
+    },
+    {
+      "stable_id": "component_01M15EP52VBDDS10ZV44K95G04",
+      "version": "1.4",
+      "passport_digest": "sha256:53a3e0c018d62db999043d4ba8e2bc8fa75f766dd1493edd7fe03d274bb56159",
+      "adaptation_id": "adaptation_5e2cf783f17d5085e3ba53fdbb75754298dbc727394b9505957be1c0b62959ef"
+    },
+    {
+      "stable_id": "component_01M15EP5NNPN81YT42ZZ16JC9E",
+      "version": "1.4",
+      "passport_digest": "sha256:5672b52d18aa86451ddf2363316063e2e023728ad223de4394ff36de8679e4ea",
+      "adaptation_id": "adaptation_8d38a94dfab67e653ec2b4d1649e5fe2da9af6d3ed3fc623699f2163bdd00aa9"
+    },
+    {
+      "stable_id": "component_01M15EP67BTT0N821M40ST3XFT",
+      "version": "1.4",
+      "passport_digest": "sha256:c19bc27a313862b416dafc4e60a747dc3b5a5da6a9b5983e423285361f8949c2",
+      "adaptation_id": "adaptation_bb2a8b90183b3073daab5edb6f32f37a107c086b85b6e74dd33ad89792dad755"
+    },
+    {
+      "stable_id": "component_01M15EP6S76MR76XYEKPTGZD66",
+      "version": "1.4",
+      "passport_digest": "sha256:a280d834efd77fed52c0e366c84b8b7bf4f8d7085f4865789c9a9b9c2e82427f",
+      "adaptation_id": "adaptation_5b6d5f789022f53932101ba3a1ea62e9518097b84be6869fa8f745676ee06961"
+    },
+    {
+      "stable_id": "component_01M15EP7C3QA4ACHVFWWX0600Y",
+      "version": "1.5",
+      "passport_digest": "sha256:6519b720ecbfb23283f3f1180d9d9bf8950652ef96ae91872a7919797130168f",
+      "adaptation_id": "adaptation_0d8cc82fc385bafad7e062ec17d6d2a2fc66de891e3873d376f7b6b57668100b"
+    },
+    {
+      "stable_id": "component_01M15EPC3H2E7V808QQH61CFD2",
+      "version": "1.4",
+      "passport_digest": "sha256:15c3193ec43dd1738464b5a5a9bf93613255dcb28d9a1d294ee79d50ca79e7e9",
+      "adaptation_id": "adaptation_a8f1a52a3c1b3563a1e3b4976d06f28a8e9963686b66f86f589f056c93c16f8d"
+    }
   ]
 }
