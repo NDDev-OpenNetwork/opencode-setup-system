@@ -5,5 +5,22 @@
   "sources": [
     "https://opencode.ai/docs/config",
     "https://opencode.ai/docs/permissions"
+  ],
+  "setup_stable_id": "setup_01M18ZSVB5SJET014F1GZBEKQ9",
+  "setup_version": "1.2",
+  "setup_passport_digest": "sha256:40fff4bda754580177bdbd506f53bdc89ce5446ef53d7fe0cdbe4e6ff6721491",
+  "component_refs": [
+    {
+      "stable_id": "component_01M18ZSVB5SJET014F1GZBEKQA",
+      "version": "1.2",
+      "passport_digest": "sha256:3b039bd09eccf1fae80ab1340a68d3c472380f4e8fed672e924ecb610e54aa31",
+      "adaptation_id": "adaptation_8a3aa8f16f4eb8ac9ab74e28655d81cf73048ff1c42fb72d2dd1b5be17defc44"
+    },
+    {
+      "stable_id": "component_01M18ZSW28SEEQV6RMR6NDT2N8",
+      "version": "1.2",
+      "passport_digest": "sha256:69f7501b2efb9c3317c37a467959e1f21b2e07ba34fa5403429d499c4283c1fa",
+      "adaptation_id": "adaptation_4377ae1c1b2b3f7a6898cbd6e7d44547847952e693171d809d443d8544184779"
+    }
   ]
 }

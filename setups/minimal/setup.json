@@ -5,5 +5,16 @@
   "sources": [
     "https://opencode.ai/docs/config",
     "https://opencode.ai/docs/permissions"
+  ],
+  "setup_stable_id": "setup_01M18ZST7JW162TTNBDZYH9JN4",
+  "setup_version": "1.2",
+  "setup_passport_digest": "sha256:f54f555127bb4b8db6b8e3ce64bb82c569f9d6592c554c3ee86c7fb98e4bca0c",
+  "component_refs": [
+    {
+      "stable_id": "component_01M18ZST7JW162TTNBDZYH9JN5",
+      "version": "1.2",
+      "passport_digest": "sha256:cd84c8fa4d4adaa5e85d0614eae08b855a032a334e66f6542cf2a2706e579dbd",
+      "adaptation_id": "adaptation_99a68ebbff3bbb1de0756cde7a51ebf770e30f089ab1fadb665c71c7bdea874c"
+    }
   ]
 }
