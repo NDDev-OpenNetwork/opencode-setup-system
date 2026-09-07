@@ -14,7 +14,7 @@ use std::process::ExitCode;
 
 mod software;
 
-use harness_runtime::{Harness, LaunchBinding, Scoped, Shadow};
+use harness_runtime::{Harness, LaunchBinding, PreservationSurface, Scoped, Shadow};
 use provider_v3::{ComponentKind, ProjectionKind, TargetScope};
 
 /// Everything specific to OpenCode, verified against `opencode-baseline.json`.
@@ -115,6 +115,22 @@ pub const OPENCODE: Harness = Harness {
     // them -- every posture agrees there is nothing, which makes the
     // emptiness a statement none of them made.
     custody_namespaces: &["tui.json"],
+    preservation_surfaces: &[PreservationSurface {
+        scope: None,
+        roots: &[
+            "opencode.jsonc",
+            "tui.jsonc",
+            "agent",
+            "command",
+            "skill",
+            "plugin",
+            "package.json",
+            "package-lock.json",
+            "bun.lock",
+            "node_modules",
+        ],
+        excluded: &["auth.json", "cache"],
+    }],
     never_touch: &["auth.json", "cache"],
     // No near neighbour measured for this product. A marker listed here is a
     // refusal waiting to happen, so nothing is listed without evidence.
