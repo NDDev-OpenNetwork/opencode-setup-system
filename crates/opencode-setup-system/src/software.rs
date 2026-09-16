@@ -20,6 +20,60 @@ use harness_runtime::{Artifact, Delivery, Previous, Shape, Software};
 pub(crate) const ARTIFACTS: &[Artifact] = &[
     Artifact {
         platform: "linux/arm64",
+        url: "https://registry.npmjs.org/opencode-linux-arm64/-/opencode-linux-arm64-1.18.31.tgz",
+        bytes: 60_022_468,
+        sha256: "sha256:9f30fc9882c2782b7ce5714db5263993f6bcb310c8c590192baa7cfd9b7465d0",
+        shape: Shape::GzipTar,
+        member: "package/bin/opencode",
+    },
+    Artifact {
+        platform: "linux/x86_64",
+        url: "https://registry.npmjs.org/opencode-linux-x64/-/opencode-linux-x64-1.18.31.tgz",
+        bytes: 60_232_635,
+        sha256: "sha256:6d89da252a8b030d923e728396dc34465cf6095101b78222b0ee337b68140dea",
+        shape: Shape::GzipTar,
+        member: "package/bin/opencode",
+    },
+    Artifact {
+        platform: "macos/arm64",
+        url: "https://registry.npmjs.org/opencode-darwin-arm64/-/opencode-darwin-arm64-1.18.31.tgz",
+        bytes: 46_009_615,
+        sha256: "sha256:e1fa9a06765f0b3419b65f05ddfd457977c4ea07ab9c143192a4392fab57d671",
+        shape: Shape::GzipTar,
+        member: "package/bin/opencode",
+    },
+    Artifact {
+        platform: "macos/x86_64",
+        url: "https://registry.npmjs.org/opencode-darwin-x64/-/opencode-darwin-x64-1.18.31.tgz",
+        bytes: 48_184_570,
+        sha256: "sha256:dfcf4aa1207f1f47a6ff6620fe19a07ac6b204e8c27786f337ac8b38344494ea",
+        shape: Shape::GzipTar,
+        member: "package/bin/opencode",
+    },
+    Artifact {
+        platform: "windows/arm64",
+        url: "https://registry.npmjs.org/opencode-windows-arm64/-/opencode-windows-arm64-1.18.31.tgz",
+        bytes: 58_462_934,
+        sha256: "sha256:bae1dec9b774176e4364da7abbbe96007c3ae5f09766217c9064bdb811848ec1",
+        shape: Shape::GzipTar,
+        member: "package/bin/opencode.exe",
+    },
+    Artifact {
+        platform: "windows/x86_64",
+        url: "https://registry.npmjs.org/opencode-windows-x64/-/opencode-windows-x64-1.18.31.tgz",
+        bytes: 60_152_538,
+        sha256: "sha256:8a300ee2b3210ccc6894ff27d21bdb0a60ee44107389c49b743b4caed10aa5cf",
+        shape: Shape::GzipTar,
+        member: "package/bin/opencode.exe",
+    },
+];
+
+/// The artifacts 1.18.30 was published as, kept so
+/// `software_update` has a version to move from and `rollback` a tree to
+/// return to. Measured from bytes when it was the current pin.
+pub(crate) const PREVIOUS_ARTIFACTS: &[Artifact] = &[
+    Artifact {
+        platform: "linux/arm64",
         url: "https://registry.npmjs.org/opencode-linux-arm64/-/opencode-linux-arm64-1.18.30.tgz",
         bytes: 59_985_069,
         sha256: "sha256:1e20b66e76afbb7c1e5cd9be7515d2744cb4ea3476ff57add1f7e9ad6fb3a32d",
@@ -68,68 +122,14 @@ pub(crate) const ARTIFACTS: &[Artifact] = &[
     },
 ];
 
-/// The artifacts 1.18.29 was published as, kept so
-/// `software_update` has a version to move from and `rollback` a tree to
-/// return to. Measured from bytes when it was the current pin.
-pub(crate) const PREVIOUS_ARTIFACTS: &[Artifact] = &[
-    Artifact {
-        platform: "linux/arm64",
-        url: "https://registry.npmjs.org/opencode-linux-arm64/-/opencode-linux-arm64-1.18.29.tgz",
-        bytes: 59_952_206,
-        sha256: "sha256:bbc655accf8263d44e5c668ef865520239e58bef515057bf8ecc27d006a6f28a",
-        shape: Shape::GzipTar,
-        member: "package/bin/opencode",
-    },
-    Artifact {
-        platform: "linux/x86_64",
-        url: "https://registry.npmjs.org/opencode-linux-x64/-/opencode-linux-x64-1.18.29.tgz",
-        bytes: 60_170_392,
-        sha256: "sha256:a2df564ba242759e3ee27cbd356da786243a3d3fd911cf5aa2c417521aef3042",
-        shape: Shape::GzipTar,
-        member: "package/bin/opencode",
-    },
-    Artifact {
-        platform: "macos/arm64",
-        url: "https://registry.npmjs.org/opencode-darwin-arm64/-/opencode-darwin-arm64-1.18.29.tgz",
-        bytes: 45_944_097,
-        sha256: "sha256:1fc08fee8b4984c1306c826b8c0e2c367fd9eeb4d4c3707469194e3fea047e72",
-        shape: Shape::GzipTar,
-        member: "package/bin/opencode",
-    },
-    Artifact {
-        platform: "macos/x86_64",
-        url: "https://registry.npmjs.org/opencode-darwin-x64/-/opencode-darwin-x64-1.18.29.tgz",
-        bytes: 48_120_807,
-        sha256: "sha256:d9e2270b9040d7ce140df629773c68f15222c7a6c882f16921d36aa4c9200ae2",
-        shape: Shape::GzipTar,
-        member: "package/bin/opencode",
-    },
-    Artifact {
-        platform: "windows/arm64",
-        url: "https://registry.npmjs.org/opencode-windows-arm64/-/opencode-windows-arm64-1.18.29.tgz",
-        bytes: 58_399_395,
-        sha256: "sha256:ad2f4a063a6d82578edc0b37078eff76fcb2a58f6439a33c34a50e1c795512b8",
-        shape: Shape::GzipTar,
-        member: "package/bin/opencode.exe",
-    },
-    Artifact {
-        platform: "windows/x86_64",
-        url: "https://registry.npmjs.org/opencode-windows-x64/-/opencode-windows-x64-1.18.29.tgz",
-        bytes: 60_086_309,
-        sha256: "sha256:19eca6cdead9c67cce26fdc2db165980318edb7318c8c964dfc2ebffe03bb472",
-        shape: Shape::GzipTar,
-        member: "package/bin/opencode.exe",
-    },
-];
-
 /// Opencode's program, and where its bytes come from.
 pub(crate) const SOFTWARE: Software = Software {
-    version: "1.18.30",
+    version: "1.18.31",
     command: "opencode",
     delivery: Delivery::Artifacts(ARTIFACTS),
     unsupported: &[],
     previous: Some(Previous {
-        version: "1.18.29",
+        version: "1.18.30",
         artifacts: PREVIOUS_ARTIFACTS,
     }),
 };
