@@ -18,8 +18,11 @@ Generated from the vendor's own reference and the pinned binary. Do not edit: th
 | `model` | no | Model override. |
 | `temperature` | no | Sampling temperature. |
 | `top_p` | no | Nucleus sampling. |
-| `tools` | no | Enable or disable tools. |
-| `permission` | no | `allow`, `deny` or `ask`; keys are matched as wildcard patterns against the tool name, so the same syntax covers built-ins, custom tools and MCP tools. |
+| `steps` | no | Maximum agentic steps. Replaces the deprecated `maxSteps`; at the limit the agent is told to answer with what it has. |
+| `prompt` | no | A system prompt, or `{file:...}` to load one -- the JSON-config form; in a Markdown file the body is already the prompt. |
+| `hidden` | no | Keep a subagent out of the `@` autocomplete; for internal agents invoked by others. |
+| `tools` | no | **Deprecated** -- write `permission` instead. |
+| `permission` | no | `allow`, `deny` or `ask`; keys are matched as wildcard patterns against the tool name, so the same syntax covers built-ins, custom tools and MCP tools. Its `task` key gates which subagents this one may invoke. |
 | `disable` | no | Boolean. |
 | `color` | no | Display colour. |
 
@@ -54,11 +57,16 @@ Generated from the same rows as the section above, for every harness in this est
 | `mode` | — | — | yes | — |
 | `temperature` | — | — | yes | — |
 | `top_p` | — | — | yes | — |
+| `steps` | — | — | yes | — |
+| `prompt` | — | — | yes | — |
+| `hidden` | — | — | yes | yes |
 | `permission` | — | — | yes | — |
 | `disable` | — | — | yes | — |
 | `mainAgent` | — | — | — | yes |
 | `subagent` | — | — | — | yes |
 | `commandExecutionPolicy` | — | — | — | yes |
+| `inheritMcp` | — | — | — | yes |
+| `inheritCustomizations` | — | — | — | yes |
 
 **The part that does not, and says nothing when it does not**: a field absent from a column is not rejected there -- it is read past. Nothing warns, no run fails, and the component behaves differently with the same bytes. Where the field was carrying a restriction, the restriction is simply gone. Check the column before relying on one.
 
