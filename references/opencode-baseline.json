@@ -72,13 +72,24 @@
     "external_skills_disable_env": "OPENCODE_DISABLE_EXTERNAL_SKILLS",
     "claude_compat_disable_env": "OPENCODE_DISABLE_CLAUDE_CODE",
     "native_builder_projection": [
-      "plugins/nddev-builder.js",
-      "skills/nddev-builder/SKILL.md",
-      "skills/nddev-builder/references/native-surfaces.md",
-      "skills/nddev-builder/references/security-boundary.md",
+      "AGENTS.md",
       "agents/nddev-builder.md",
-      "commands/nddev-orient.md",
-      "commands/nddev-validate.md"
+      "commands/nddev-setup.md",
+      "commands/nddev-surfaces.md",
+      "commands/nddev-validate.md",
+      "opencode.json",
+      "skills/nddev-builder/SKILL.md",
+      "skills/nddev-builder/references/ai-stp-lifecycle.md",
+      "skills/nddev-builder/references/authoring-agents.md",
+      "skills/nddev-builder/references/authoring-commands.md",
+      "skills/nddev-builder/references/authoring-instructions.md",
+      "skills/nddev-builder/references/authoring-plugins.md",
+      "skills/nddev-builder/references/authoring-settings.md",
+      "skills/nddev-builder/references/authoring-skills.md",
+      "skills/nddev-builder/references/lifecycle.md",
+      "skills/nddev-builder/references/second-target.md",
+      "skills/nddev-builder/references/surfaces.md",
+      "skills/nddev-builder/references/validation.md"
     ],
     "marketplace": null,
     "product_writes_into_target": [
@@ -86,7 +97,8 @@
     ],
     "product_writes_into_target_note": "Exercised 2026-08-31 against a temporary home: a single `debug config` -- a read-only command, and the provider's own probe -- creates `.gitignore` in the target, listing `node_modules`, `package.json`, `package-lock.json`, `bun.lock` and itself. It appears with no plugin installed and with no setup content that asks for it, so any target this product has started against has it. It is not in `native_namespaces`: this provider neither installs it nor removes it, and it is the product's, not a user's. Recorded so a target that grew one is not read as somebody's stray file.",
     "permission_env": "OPENCODE_PERMISSION",
-    "permission_env_note": "**An inherited variable replaces the posture this provider installed, and launch passes it through.** Exercised 2026-08-31 against a temporary home with `baseline` in the target: `debug agent build` ends `edit ask, bash ask`, and the same run with `OPENCODE_PERMISSION={\"bash\":\"allow\"}` in the environment ends `edit ask, bash allow`. Whoever starts the provider decides that, not the setup.\n\n**Named and not closed, deliberately.** Launch forces two variables -- the configuration home and the update switch -- because without the first the target is not read at all and without the second the bytes this provider recorded can be replaced underneath it. Neither is a posture. Scrubbing this one would be: it is a capability the product gives a person, and taking it away silently is the same move as deleting an `opencode.jsonc` somebody put beside our file. The answer is the same as there -- say it, do not decide it -- and saying it is a launch-time report this build does not have yet. Recorded so the gap is a known one rather than a discovery."
+    "permission_env_note": "**An inherited variable replaces the posture this provider installed, and launch passes it through.** Exercised 2026-08-31 against a temporary home with `baseline` in the target: `debug agent build` ends `edit ask, bash ask`, and the same run with `OPENCODE_PERMISSION={\"bash\":\"allow\"}` in the environment ends `edit ask, bash allow`. Whoever starts the provider decides that, not the setup.\n\n**Named and not closed, deliberately.** Launch forces two variables -- the configuration home and the update switch -- because without the first the target is not read at all and without the second the bytes this provider recorded can be replaced underneath it. Neither is a posture. Scrubbing this one would be: it is a capability the product gives a person, and taking it away silently is the same move as deleting an `opencode.jsonc` somebody put beside our file. The answer is the same as there -- say it, do not decide it -- and saying it is a launch-time report this build does not have yet. Recorded so the gap is a known one rather than a discovery.",
+    "native_builder_projection_note": "The files the nddev-builder setup writes into the product home, read back from the shipped tree rather than remembered -- the previous list named a `plugins/nddev-builder.js` and `commands/nddev-orient.md` that no longer exist and omitted the authoring references. Re-derived 2026-09-27."
   },
   "permissions": {
     "current_key": "permission",
@@ -109,7 +121,7 @@
     "OPENCODE_DISABLE_PROJECT_CONFIG",
     "OPENCODE_DISABLE_SHARE"
   ],
-  "verified_at": "2026-09-25T11:49:12+00:00",
+  "verified_at": "2026-09-27T07:42:17+00:00",
   "native_surfaces": {
     "verified_at": "2026-08-31",
     "config_home": "~/.config/opencode",
@@ -254,6 +266,16 @@
         "path": "hooks.json",
         "reason": "**Hooks are functions a plugin module exports**, not a file. The vendor's plugin page, read 2026-08-29: *\"A plugin is a JavaScript/TypeScript module that exports one or more plugin functions. Each function receives a context object and returns a hooks object.\"* The names -- `tool.execute.before`, `session.created`, `permission.asked` and the rest -- are keys of that returned object. There is no `hooks.json` and no `hooks` key in `opencode.json`, so a hook reaches this product through `plugins/`, which is owned and routes `plugin`.",
         "source": "https://opencode.ai/docs/plugins/"
+      },
+      {
+        "path": ".well-known/opencode",
+        "source": "measured in the 1.18.31 linux/x86_64 binary (auth type \"wellknown\" -> fetch `${origin}/.well-known/opencode`), and https://opencode.ai/docs/config precedence order, 2026-09-27",
+        "reason": "Not a path in the target: the product fetches `<provider-origin>/.well-known/opencode` when an authenticated provider carries `type: \"wellknown\"`, and loads the result as the **lowest** precedence layer -- every local layer overrides it. Recorded so nobody reads a shipped `opencode.json` as the only thing that can configure a run: an authenticated provider's organization defaults sit underneath it. This provider writes no remote config and cannot."
+      },
+      {
+        "path": "themes",
+        "source": "measured in the 1.18.31 linux/x86_64 binary (`scan(\"themes/*.json\", {cwd: <each config dir>})`), 2026-09-27; documented at https://opencode.ai/docs/themes",
+        "reason": "A real directory under the configuration home -- the product globs `themes/*.json` there (and under `.opencode/` project dirs) for user color themes. Deliberately not owned: themes are TUI cosmetics a person curates, and no component kind routes them, so a setup owning the directory would promise a rollback of somebody's personal theme files."
       }
     ],
     "config_home_env": "OPENCODE_CONFIG_DIR",
@@ -287,7 +309,8 @@
     ],
     "projection_basis": {
       "plugin": "plugins"
-    }
+    },
+    "v2_coexistence_note": "OpenCode maintains a `v2` documentation line (opencode.ai/v2/docs) for the next major version while the shipped CLI is 1.x. Surfaces documented only there -- `cli.json` among them -- are absent from the pinned v1.18.x binary (measured 2026-09-27: no `cli.json` reader in the linux/x86_64 artifact), so they are recorded here rather than declined as real files. Re-measure when the product line ships."
   },
   "software_artifacts": {
     "command": "opencode",
@@ -331,9 +354,9 @@
       }
     },
     "version": "1.18.32",
-    "verified_at": "2026-09-25T11:49:12+00:00"
+    "verified_at": "2026-09-27T07:42:17+00:00"
   },
-  "setup_catalogue_digest": "sha256:e251847ceb02bd92b12fd07ba83b6ac836d37e3cbdbf9aba1607719b281ab7e8",
+  "setup_catalogue_digest": "sha256:da0e9f9598e8f98486c144452689946d2e4145c00b3144499fc64eea63e3fc8c",
   "previous_software_artifacts": {
     "command": "opencode",
     "shape": "gzip-tar",
