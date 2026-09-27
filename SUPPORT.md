@@ -249,6 +249,10 @@ The user configuration home is **not** per-OS, which is why only this row is. Th
 
 **`hooks.json`** -- **Hooks are functions a plugin module exports**, not a file. The vendor's plugin page, read 2026-08-29: *"A plugin is a JavaScript/TypeScript module that exports one or more plugin functions. Each function receives a context object and returns a hooks object."* The names -- `tool.execute.before`, `session.created`, `permission.asked` and the rest -- are keys of that returned object. There is no `hooks.json` and no `hooks` key in `opencode.json`, so a hook reaches this product through `plugins/`, which is owned and routes `plugin`. ([source](https://opencode.ai/docs/plugins/))
 
+**`.well-known/opencode`** -- Not a path in the target: the product fetches `<provider-origin>/.well-known/opencode` when an authenticated provider carries `type: "wellknown"`, and loads the result as the **lowest** precedence layer -- every local layer overrides it. Recorded so nobody reads a shipped `opencode.json` as the only thing that can configure a run: an authenticated provider's organization defaults sit underneath it. This provider writes no remote config and cannot. (measured in the 1.18.31 linux/x86_64 binary (auth type "wellknown" -> fetch `${origin}/.well-known/opencode`), and https://opencode.ai/docs/config precedence order, 2026-09-27)
+
+**`themes`** -- A real directory under the configuration home -- the product globs `themes/*.json` there (and under `.opencode/` project dirs) for user color themes. Deliberately not owned: themes are TUI cosmetics a person curates, and no component kind routes them, so a setup owning the directory would promise a rollback of somebody's personal theme files. (measured in the 1.18.31 linux/x86_64 binary (`scan("themes/*.json", {cwd: <each config dir>})`), 2026-09-27; documented at https://opencode.ai/docs/themes)
+
 ## Response
 
 One maintainer. Defects are triaged as time allows; security reports are
