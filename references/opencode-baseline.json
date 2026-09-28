@@ -8,9 +8,9 @@
     "minimum_version_ref": "build/version.json:opencode_min"
   },
   "release": {
-    "github_release": "https://github.com/anomalyco/opencode/releases/tag/v1.18.32",
-    "github_release_api": "https://api.github.com/repos/anomalyco/opencode/releases/tags/v1.18.32",
-    "tag": "v1.18.32",
+    "github_release": "https://github.com/anomalyco/opencode/releases/tag/v1.18.33",
+    "github_release_api": "https://api.github.com/repos/anomalyco/opencode/releases/tags/v1.18.33",
+    "tag": "v1.18.33",
     "cli_signature": null,
     "cli_signature_note": "Official CLI zip/tar assets expose GitHub release asset SHA-256 digests but no PGP/cosign signature was published for the CLI assets."
   },
@@ -121,7 +121,7 @@
     "OPENCODE_DISABLE_PROJECT_CONFIG",
     "OPENCODE_DISABLE_SHARE"
   ],
-  "verified_at": "2026-09-27T07:42:17+00:00",
+  "verified_at": "2026-09-28T07:07:41+00:00",
   "native_surfaces": {
     "verified_at": "2026-08-31",
     "config_home": "~/.config/opencode",
@@ -317,6 +317,51 @@
     "shape": "gzip-tar",
     "platforms": {
       "linux/arm64": {
+        "url": "https://registry.npmjs.org/opencode-linux-arm64/-/opencode-linux-arm64-1.18.33.tgz",
+        "bytes": 60060899,
+        "sha256": "sha256:196d0caf1c0553fcd12ef15ff14439ea7e6bc7a4e87ea5238bcb57bbe6e54b93",
+        "member": "package/bin/opencode"
+      },
+      "linux/x86_64": {
+        "url": "https://registry.npmjs.org/opencode-linux-x64/-/opencode-linux-x64-1.18.33.tgz",
+        "bytes": 60275143,
+        "sha256": "sha256:149a676b59224b196626abda2fdbd34c8329ac326b57c4891ba3de446f3ca3c1",
+        "member": "package/bin/opencode"
+      },
+      "macos/arm64": {
+        "url": "https://registry.npmjs.org/opencode-darwin-arm64/-/opencode-darwin-arm64-1.18.33.tgz",
+        "bytes": 46045337,
+        "sha256": "sha256:cd2c704ad653137b62992bca2b32383f8daa31b3c9462e566278e1efba07b31d",
+        "member": "package/bin/opencode"
+      },
+      "macos/x86_64": {
+        "url": "https://registry.npmjs.org/opencode-darwin-x64/-/opencode-darwin-x64-1.18.33.tgz",
+        "bytes": 48221422,
+        "sha256": "sha256:e23cf36d4db46214dbf947b7b78bac63d2f0a9e6e987c5d6e47c573d8bb6ff32",
+        "member": "package/bin/opencode"
+      },
+      "windows/arm64": {
+        "url": "https://registry.npmjs.org/opencode-windows-arm64/-/opencode-windows-arm64-1.18.33.tgz",
+        "bytes": 58509317,
+        "sha256": "sha256:20853b3b92e9dc3e9cf9f5867e0f5d0d50506655788e508397e4680271f9ce85",
+        "member": "package/bin/opencode.exe"
+      },
+      "windows/x86_64": {
+        "url": "https://registry.npmjs.org/opencode-windows-x64/-/opencode-windows-x64-1.18.33.tgz",
+        "bytes": 60196031,
+        "sha256": "sha256:fc76bd4a0f258027594f6a8900e220fd06f7345cb5e67f73dc3b4f53ba3f580e",
+        "member": "package/bin/opencode.exe"
+      }
+    },
+    "version": "1.18.33",
+    "verified_at": "2026-09-28T07:07:41+00:00"
+  },
+  "setup_catalogue_digest": "sha256:2bc4f39b26da94b2b65f5ea2a3fc8a8b788611d9676e7bce405453f6c4c4daff",
+  "previous_software_artifacts": {
+    "command": "opencode",
+    "shape": "gzip-tar",
+    "platforms": {
+      "linux/arm64": {
         "url": "https://registry.npmjs.org/opencode-linux-arm64/-/opencode-linux-arm64-1.18.32.tgz",
         "bytes": 60032395,
         "sha256": "sha256:29ab2d61a70e99d1224d289115c3b8194ff254968e2609531186227be39b2001",
@@ -355,51 +400,6 @@
     },
     "version": "1.18.32",
     "verified_at": "2026-09-27T07:42:17+00:00"
-  },
-  "setup_catalogue_digest": "sha256:b89cd6a4da1411e812615d41c94870ea289dc1199cb112125a93d2c49eadbb13",
-  "previous_software_artifacts": {
-    "command": "opencode",
-    "shape": "gzip-tar",
-    "platforms": {
-      "linux/arm64": {
-        "url": "https://registry.npmjs.org/opencode-linux-arm64/-/opencode-linux-arm64-1.18.31.tgz",
-        "bytes": 60022468,
-        "sha256": "sha256:9f30fc9882c2782b7ce5714db5263993f6bcb310c8c590192baa7cfd9b7465d0",
-        "member": "package/bin/opencode"
-      },
-      "linux/x86_64": {
-        "url": "https://registry.npmjs.org/opencode-linux-x64/-/opencode-linux-x64-1.18.31.tgz",
-        "bytes": 60232635,
-        "sha256": "sha256:6d89da252a8b030d923e728396dc34465cf6095101b78222b0ee337b68140dea",
-        "member": "package/bin/opencode"
-      },
-      "macos/arm64": {
-        "url": "https://registry.npmjs.org/opencode-darwin-arm64/-/opencode-darwin-arm64-1.18.31.tgz",
-        "bytes": 46009615,
-        "sha256": "sha256:e1fa9a06765f0b3419b65f05ddfd457977c4ea07ab9c143192a4392fab57d671",
-        "member": "package/bin/opencode"
-      },
-      "macos/x86_64": {
-        "url": "https://registry.npmjs.org/opencode-darwin-x64/-/opencode-darwin-x64-1.18.31.tgz",
-        "bytes": 48184570,
-        "sha256": "sha256:dfcf4aa1207f1f47a6ff6620fe19a07ac6b204e8c27786f337ac8b38344494ea",
-        "member": "package/bin/opencode"
-      },
-      "windows/arm64": {
-        "url": "https://registry.npmjs.org/opencode-windows-arm64/-/opencode-windows-arm64-1.18.31.tgz",
-        "bytes": 58462934,
-        "sha256": "sha256:bae1dec9b774176e4364da7abbbe96007c3ae5f09766217c9064bdb811848ec1",
-        "member": "package/bin/opencode.exe"
-      },
-      "windows/x86_64": {
-        "url": "https://registry.npmjs.org/opencode-windows-x64/-/opencode-windows-x64-1.18.31.tgz",
-        "bytes": 60152538,
-        "sha256": "sha256:8a300ee2b3210ccc6894ff27d21bdb0a60ee44107389c49b743b4caed10aa5cf",
-        "member": "package/bin/opencode.exe"
-      }
-    },
-    "version": "1.18.31",
-    "verified_at": "2026-09-19T14:52:16+00:00"
   },
   "source_verified_runtime_flags_note": "All five read out of the 1.18.25 binary on 2026-08-31 -- the whole `OPENCODE_*` set is in its string table, and these are the five this provider has a reason to name. **Nothing in this repository read this block until now.** It is the same shape as the `windows` row that sat under `unsupported` for weeks while this provider installed Windows: a true-when-written list with no reader, which is the condition a stale fact needs. `native_declaration_names_the_switch_it_sets` now ties `updates_off_env` to this list, so the declaration and the measurement cannot drift apart in silence.",
   "surface_presence": {
