@@ -356,7 +356,7 @@
     "version": "1.18.33",
     "verified_at": "2026-09-28T14:27:53+00:00"
   },
-  "setup_catalogue_digest": "sha256:2bc4f39b26da94b2b65f5ea2a3fc8a8b788611d9676e7bce405453f6c4c4daff",
+  "setup_catalogue_digest": "sha256:7a5ac4414efe1db02165df91cabb8453b4ed8c94423154f2afdb8c9a870e980d",
   "previous_software_artifacts": {
     "command": "opencode",
     "shape": "gzip-tar",

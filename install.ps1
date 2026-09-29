@@ -8,7 +8,7 @@
 [CmdletBinding()]
 param(
   [string]$Version = "0.0.81",
-  [string]$InstallDir = "$env:LOCALAPPDATA\Programs\opencode-setup-system"
+  [string]$InstallDir = $(if ($env:OPENCODE_INSTALL_DIR) { $env:OPENCODE_INSTALL_DIR } else { "$env:LOCALAPPDATA\Programs\opencode-setup-system" })
 )
 $ErrorActionPreference = "Stop"
 
