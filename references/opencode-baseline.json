@@ -121,7 +121,7 @@
     "OPENCODE_DISABLE_PROJECT_CONFIG",
     "OPENCODE_DISABLE_SHARE"
   ],
-  "verified_at": "2026-09-28T14:27:53+00:00",
+  "verified_at": "2026-09-29T21:25:11+00:00",
   "native_surfaces": {
     "verified_at": "2026-08-31",
     "config_home": "~/.config/opencode",
@@ -354,7 +354,7 @@
       }
     },
     "version": "1.18.33",
-    "verified_at": "2026-09-28T14:27:53+00:00"
+    "verified_at": "2026-09-29T21:25:11+00:00"
   },
   "setup_catalogue_digest": "sha256:d0cf7ef9be83eba56d3d496069de6a5eba3e9f19cc7b27690c2c7860f59ef602",
   "previous_software_artifacts": {
