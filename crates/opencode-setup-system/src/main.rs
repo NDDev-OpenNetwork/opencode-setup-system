@@ -163,8 +163,8 @@ pub const OPENCODE: Harness = Harness {
     // writing -- the removal refuses rather than widening when it cannot read
     // the record, the capture takes ours and not a neighbour's, and a restore
     // leaves a neighbour's file as it was. Five of the seven products read
-    // this root and one declared it; the reason was simply not re-read when
-    // the thing it described changed.
+    // this root, and all five declare it now; the reason was simply not
+    // re-read when the thing it described changed.
     scoped_projections: &[Scoped {
         target_scope: TargetScope::UserRoot,
         // Distinct from the global identity, because the digest binds a
@@ -566,7 +566,7 @@ mod tests {
     }
     /// Three postures, on every one of the seven.
     ///
-    /// `baseline` is a working floor, `minimal` is the product's own defaults,
+    /// `baseline` is a working floor, `minimal` is the shared autonomous posture and nothing else,
     /// and `full-auto` asks nothing and sandboxes nothing. A caller who learns
     /// them on one product knows them on all seven, which is the whole reason
     /// the names are the estate's rather than each harness's.
