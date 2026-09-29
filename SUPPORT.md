@@ -45,7 +45,7 @@ in a JSON file it owns it strips the keys it added rather than taking the
 file. Anything under those paths this build never wrote stays. Emptying every
 owned namespace is a separate, explicitly named operation: `reset`.
 
-No credential-free command is measured writing this product's home -- the dated measurement lives in `references/` and the absence is recorded, not assumed. The receipt discipline is the same for whatever arrives later: a file this provider wrote is captured into a slot before the next `install`, withdrawn by `remove`, and returned byte for byte by `restore`.
+This product does write its own configuration without credentials -- `mcp add` is one such command -- but the write lands in the real `~/.config/opencode/opencode.json` even when the configuration directory is pointed elsewhere, so the demonstration would touch a person's actual home rather than a target. It is deliberately not run for evidence. The receipt discipline is the same for whatever arrives later: a file this provider wrote is captured into a slot before the next `install`, withdrawn by `remove`, and returned byte for byte by `restore`.
 
 So: point `--target` at a home you are willing to have managed. `backups
 --target <dir>` names every earlier state and which setup each preceded, and
@@ -169,8 +169,9 @@ Configuration home as the product documents it: `~/.config/opencode`.
 | `plugins` | `plugin` | [source](https://opencode.ai/docs/plugins) |
 | `tui.json` | -- | [source](https://opencode.ai/docs/tui) |
 
-A path routing no component kind is owned so a setup can carry it;
-nothing compiles a component to it.
+A custody row like `tui.json` routes no component kind because no setup
+can ever fill it: it is owned so a backup captures it and `remove`
+withdraws it, and so a posture switch does not empty it.
 
 ### A second target: `target_scope: user_root`
 

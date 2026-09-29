@@ -107,8 +107,6 @@ pub const OPENCODE: Harness = Harness {
                      pinned binary; the collision was measured on skills",
         },
     ],
-    // The product's own: credentials and runtime caches. Never read, never
-    // written, and never copied into a backup slot.
     // Owned, and nothing this build can install ever lands here: no
     // component kind routes to them and no setup in this catalogue
     // carries files there. So a posture selecting itself must not empty
@@ -131,6 +129,8 @@ pub const OPENCODE: Harness = Harness {
         ],
         excluded: &["auth.json", "cache"],
     }],
+    // The product's own: credentials and runtime caches. Never read, never
+    // written, and never copied into a backup slot.
     never_touch: &["auth.json", "cache"],
     // No near neighbour measured for this product. A marker listed here is a
     // refusal waiting to happen, so nothing is listed without evidence.
