@@ -70,9 +70,10 @@ pub const OPENCODE: Harness = Harness {
         "commands",
         "plugins",
     ],
-    // Five names the product reads and this provider does not own, each
-    // measured 2026-08-31 by running the 1.18.25 binary against a
-    // temporary home. Declared so `status` can say what it cannot decide.
+    // Six names the product reads and this provider does not own -- the first
+    // five measured 2026-08-31 by running the 1.18.25 binary against a
+    // temporary home, `tui.jsonc` added when the 1.18.33 binary's loader showed
+    // both spellings. Declared so `status` can say what it cannot decide.
     shadowing_names: &[
         Shadow {
             name: "opencode.jsonc",
@@ -80,6 +81,15 @@ pub const OPENCODE: Harness = Harness {
             effect: "the product's candidate list joins the two in that order \
                      and keeps the later, so this one wins: with both present \
                      `debug config` returned the JSONC file's value",
+        },
+        Shadow {
+            name: "tui.jsonc",
+            over: "tui.json",
+            effect: "the TUI loader iterates `fileInDirectory`'s \
+                     [tui.json, tui.jsonc] candidates and merges each in turn, \
+                     so the JSONC spelling applies last and wins -- measured in \
+                     the pinned 1.18.33 binary, where the name is built by a \
+                     `${o}.jsonc` template no fixed-string search can see",
         },
         Shadow {
             name: "skill",
