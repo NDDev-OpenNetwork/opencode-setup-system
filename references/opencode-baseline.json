@@ -8,9 +8,9 @@
     "minimum_version_ref": "build/version.json:opencode_min"
   },
   "release": {
-    "github_release": "https://github.com/anomalyco/opencode/releases/tag/v1.18.33",
-    "github_release_api": "https://api.github.com/repos/anomalyco/opencode/releases/tags/v1.18.33",
-    "tag": "v1.18.33",
+    "github_release": "https://github.com/anomalyco/opencode/releases/tag/v1.18.34",
+    "github_release_api": "https://api.github.com/repos/anomalyco/opencode/releases/tags/v1.18.34",
+    "tag": "v1.18.34",
     "cli_signature": null,
     "cli_signature_note": "Official CLI zip/tar assets expose GitHub release asset SHA-256 digests but no PGP/cosign signature was published for the CLI assets."
   },
@@ -39,11 +39,11 @@
     "windows_note": "The vendor publishes `opencode-windows-x64` and `opencode-windows-arm64` and its own `opencode-ai` package declares `os: [darwin, linux, win32]`. Read from the npm registry on 2026-08-29, not from a page -- a third-party guide asserted that no windows-arm64 binary exists, and the registry has one at the same version as every other host.",
     "coverage_note": "Platform coverage is decided by `software_artifacts` and nothing else. This block held `windows` under unsupported until 2026-08-29, inherited from the retired nddev-*-app line, and by then it was false: the vendor ships Windows and this provider installs it. It said so for as long as it did because nothing in this repository read the block -- see `the artifact-table transcription check`, which now compares it against the artifact table so the two cannot disagree again.",
     "x64_baseline_builds": {
-      "opencode-darwin-x64": "identical",
+      "opencode-darwin-x64": "signature-only",
       "opencode-linux-x64": "identical",
       "opencode-windows-x64": "signature-only"
     },
-    "x64_baseline_builds_note": "The vendor publishes a `-baseline` package beside each x64 build, for CPUs without AVX2, and its own launcher tries them as a fallback list and keeps whichever answers `--version`. This provider selects one package per platform and never falls back, so a review filed every non-AVX2 x64 host as incorrectly covered. Measured 2026-08-31 against the 1.18.25 packages, by comparing the program inside each pair rather than the tarballs: there is no second build. Linux and macOS are byte-identical to their `-baseline` siblings, and the Windows pair differs in 1694 bytes of 179MB -- an Authenticode countersignature three seconds later and the header fields signing rewrites -- with the same size and the same AVX2 instruction counts. So the finding is empty at this pin, and empty is a property of this release rather than of the design: the pin refresher now compares the pair at every refresh and says so when they stop matching, which is the point at which the host scope would need a CPU dimension. The distinction the vendor keeps the names for is the fallback list, not a second program.",
+    "x64_baseline_builds_note": "The vendor publishes a `-baseline` package beside each x64 build, for CPUs without AVX2, and its own launcher tries them as a fallback list and keeps whichever answers `--version`. This provider selects one package per platform and never falls back, so a review filed every non-AVX2 x64 host as incorrectly covered. Measured 2026-08-31 against the 1.18.25 packages, by comparing the program inside each pair rather than the tarballs: there is no second build. Linux and macOS are byte-identical to their `-baseline` siblings, and the Windows pair differs in 1694 bytes of 179MB -- an Authenticode countersignature three seconds later and the header fields signing rewrites -- with the same size and the same AVX2 instruction counts. So the finding is empty at this pin, and empty is a property of this release rather than of the design: the pin refresher now compares the pair at every refresh and says so when they stop matching, which is the point at which the host scope would need a CPU dimension. The distinction the vendor keeps the names for is the fallback list, not a second program. Measured 2026-10-03 at 1.18.34: the darwin pair is no longer byte-identical but still the same program -- 1157 differing bytes, all inside LC_CODE_SIGNATURE (dataoff 149997120, datasize 1191312), a Mach-O resignature of the kind the Windows pair already shows. The comparator had to learn the format to say so: it once read PE signatures only and filed this pair as `diverged` on every refresh until it was taught the load-command walk, which is why `signature-only` is now a darwin verdict and not just a Windows one.",
     "musl_precondition": "**The vendor publishes musl builds and this provider declares `linux-musl` unsupported, and the reason is not the vendor's.** Measured 2026-08-31: `opencode-linux-x64-musl` and `opencode-linux-arm64-musl` exist and differ from their glibc siblings in bytes, so they are real second builds rather than names -- unlike the `-baseline` pairs recorded above.\n\nWhat blocks the row is this provider's own release matrix: six targets, `{x86_64,aarch64}-unknown-linux-gnu`, `{x86_64,aarch64}-apple-darwin` and `{x86_64,aarch64}-pc-windows-msvc`, and no musl one. A musl artifact row would name a host on which the executable that installs it cannot start. **The order is fixed: a musl provider build first, then the artifact rows** -- the reverse is a declaration ahead of a capability, which this estate has shipped once already.\n\nNot verified on this workstation, and the reason is the environment rather than the code: `cargo` resolves from `~/.local/bin` ahead of rustup, so `--target x86_64-unknown-linux-musl` fails with *can't find crate for `std`* even with the target installed for the toolchain this repository fixes. The acceptance test is one line in CI, where no such shadow exists: build the seven providers for `x86_64-unknown-linux-musl`, run `provider-info` on an Alpine image, and only then add the rows."
   },
   "official_sources": {
@@ -121,7 +121,7 @@
     "OPENCODE_DISABLE_PROJECT_CONFIG",
     "OPENCODE_DISABLE_SHARE"
   ],
-  "verified_at": "2026-09-30T07:07:53+00:00",
+  "verified_at": "2026-10-02T22:11:59+00:00",
   "native_surfaces": {
     "verified_at": "2026-08-31",
     "config_home": "~/.config/opencode",
@@ -192,7 +192,7 @@
         "shape": "file",
         "source": "https://opencode.ai/docs/tui",
         "evidence": "page",
-        "note": "keybinds, theme, attention and sounds, deliberately separate from opencode.json, which the same documentation describes as server and runtime behaviour; the setting route stays opencode.json\n\n**Searched in the product's own pinned bytes on 2026-08-29 and not found, which argues nothing either way.** Fixed-string, anchored to this product's configuration home -- the bare leaf name is in every one of these binaries and proves nothing, so only the anchored form counts. An invented path was searched in the same run and was also absent, so the search discriminates.\n\nThis row stays `page` because **a path built by joining a directory to a name at runtime never appears as a literal**, and that is the shape of every remaining one. Moving it off `page` needs the product run against a target and asked what it resolved, not a deeper grep.\n\n**`tui.jsonc` exists, and the earlier paragraph here that denied it measured wrong.** The 1.18.25 check counted fixed strings: `tui.json` appears, `tui.jsonc` does not -- because the binary never spells it. Re-measured 2026-09-28 against the pinned 1.18.33 artifact (`sha256:149a676b…`, the digest this table pins): `ConfigPaths.projectFiles` walks `targets:[`${o}.jsonc`,`${o}.json`]` and `fileInDirectory` returns `[join(dir,`${t}.json`),join(dir,`${t}.jsonc`)]`, which is what the global `tui` load and each `.opencode`-directory load iterate. The JSONC spelling is built by the same template mechanism this note already describes for the directory half -- the search missed it for the reason given one paragraph up. The declined row carries the consequence: both spellings are real, this provider owns one.\n\n**Still `page` after a pass at it on 2026-08-31, and saying so rather than promoting it on a neighbour's evidence.** What was established: the product *writes* this file. A configuration carrying `theme`, `keybinds` or `tui` that has no `tui.json` beside it gets one written at `join(dirname(<config file>), \"tui.json\")`, and the config files include the ones in a resource directory -- so a consumer bundle setting a theme can make the product create a file this provider owns. What was **not** established is the read path from a target: it was looked for in the pinned bytes and not found, and a single `debug config` run with `theme` set did not produce the file either, so the migration needs something a read-only command does not reach. Two things absent is not one thing proven."
+        "note": "keybinds, theme, attention and sounds, deliberately separate from opencode.json, which the same documentation describes as server and runtime behaviour; the setting route stays opencode.json\n\n**Searched in the product's own pinned bytes on 2026-08-29 and not found, which argues nothing either way.** Fixed-string, anchored to this product's configuration home -- the bare leaf name is in every one of these binaries and proves nothing, so only the anchored form counts. An invented path was searched in the same run and was also absent, so the search discriminates.\n\nThis row stays `page` because **a path built by joining a directory to a name at runtime never appears as a literal**, and that is the shape of every remaining one. Moving it off `page` needs the product run against a target and asked what it resolved, not a deeper grep.\n\n**`tui.jsonc` exists, and the earlier paragraph here that denied it measured wrong.** The 1.18.25 check counted fixed strings: `tui.json` appears, `tui.jsonc` does not -- because the binary never spells it. Re-measured 2026-09-28 against the then-pinned 1.18.33 artifact (`sha256:149a676b…`, the digest this table pinned at that measurement): `ConfigPaths.projectFiles` walks `targets:[`${o}.jsonc`,`${o}.json`]` and `fileInDirectory` returns `[join(dir,`${t}.json`),join(dir,`${t}.jsonc`)]`, which is what the global `tui` load and each `.opencode`-directory load iterate. The JSONC spelling is built by the same template mechanism this note already describes for the directory half -- the search missed it for the reason given one paragraph up. The declined row carries the consequence: both spellings are real, this provider owns one.\n\n**Still `page` after a pass at it on 2026-08-31, and saying so rather than promoting it on a neighbour's evidence.** What was established: the product *writes* this file. A configuration carrying `theme`, `keybinds` or `tui` that has no `tui.json` beside it gets one written at `join(dirname(<config file>), \"tui.json\")`, and the config files include the ones in a resource directory -- so a consumer bundle setting a theme can make the product create a file this provider owns. What was **not** established is the read path from a target: it was looked for in the pinned bytes and not found, and a single `debug config` run with `theme` set did not produce the file either, so the migration needs something a read-only command does not reach. Two things absent is not one thing proven."
       }
     ],
     "declined": [
@@ -317,6 +317,51 @@
     "shape": "gzip-tar",
     "platforms": {
       "linux/arm64": {
+        "url": "https://registry.npmjs.org/opencode-linux-arm64/-/opencode-linux-arm64-1.18.34.tgz",
+        "bytes": 60094599,
+        "sha256": "sha256:6f212b830b26bf72012f1665559ddb5fd7e928294971d3d1c99a0f9097a3d311",
+        "member": "package/bin/opencode"
+      },
+      "linux/x86_64": {
+        "url": "https://registry.npmjs.org/opencode-linux-x64/-/opencode-linux-x64-1.18.34.tgz",
+        "bytes": 60309530,
+        "sha256": "sha256:b83e8ac66d752d05ead4b6a439d3a2cfa32bcd9817c708825a389b5d5cba4f19",
+        "member": "package/bin/opencode"
+      },
+      "macos/arm64": {
+        "url": "https://registry.npmjs.org/opencode-darwin-arm64/-/opencode-darwin-arm64-1.18.34.tgz",
+        "bytes": 45264760,
+        "sha256": "sha256:9a336191ee84c8f54364b5d1990ec87abb2acbb00dea189f11dda5e968d7bf05",
+        "member": "package/bin/opencode"
+      },
+      "macos/x86_64": {
+        "url": "https://registry.npmjs.org/opencode-darwin-x64/-/opencode-darwin-x64-1.18.34.tgz",
+        "bytes": 48879002,
+        "sha256": "sha256:bda35c563697ca66b2b5c5b51f6f731376de4b007d9134a52cfe6b8216acba0a",
+        "member": "package/bin/opencode"
+      },
+      "windows/arm64": {
+        "url": "https://registry.npmjs.org/opencode-windows-arm64/-/opencode-windows-arm64-1.18.34.tgz",
+        "bytes": 58544117,
+        "sha256": "sha256:b9dfab4ffcd5df5a9286d613359701dd6c8d3d880f0c426ba7a7c37eb5a7aeeb",
+        "member": "package/bin/opencode.exe"
+      },
+      "windows/x86_64": {
+        "url": "https://registry.npmjs.org/opencode-windows-x64/-/opencode-windows-x64-1.18.34.tgz",
+        "bytes": 60230073,
+        "sha256": "sha256:b4f4ae37a9ecbd6eceecf3a452573a5abdeab88ba50f93a9ad40762d7a10bae9",
+        "member": "package/bin/opencode.exe"
+      }
+    },
+    "version": "1.18.34",
+    "verified_at": "2026-10-02T22:11:59+00:00"
+  },
+  "setup_catalogue_digest": "sha256:7af5d88d0f5d51510d0b496fa95e84cc27b308be0fdbd3e3a1efca30eaac7e2c",
+  "previous_software_artifacts": {
+    "command": "opencode",
+    "shape": "gzip-tar",
+    "platforms": {
+      "linux/arm64": {
         "url": "https://registry.npmjs.org/opencode-linux-arm64/-/opencode-linux-arm64-1.18.33.tgz",
         "bytes": 60060899,
         "sha256": "sha256:196d0caf1c0553fcd12ef15ff14439ea7e6bc7a4e87ea5238bcb57bbe6e54b93",
@@ -355,51 +400,6 @@
     },
     "version": "1.18.33",
     "verified_at": "2026-09-30T07:07:53+00:00"
-  },
-  "setup_catalogue_digest": "sha256:7af5d88d0f5d51510d0b496fa95e84cc27b308be0fdbd3e3a1efca30eaac7e2c",
-  "previous_software_artifacts": {
-    "command": "opencode",
-    "shape": "gzip-tar",
-    "platforms": {
-      "linux/arm64": {
-        "url": "https://registry.npmjs.org/opencode-linux-arm64/-/opencode-linux-arm64-1.18.32.tgz",
-        "bytes": 60032395,
-        "sha256": "sha256:29ab2d61a70e99d1224d289115c3b8194ff254968e2609531186227be39b2001",
-        "member": "package/bin/opencode"
-      },
-      "linux/x86_64": {
-        "url": "https://registry.npmjs.org/opencode-linux-x64/-/opencode-linux-x64-1.18.32.tgz",
-        "bytes": 60256961,
-        "sha256": "sha256:da0803c85eb86709c4f084adcbfb0b5329936670bfe43d2367f0ca034be0c1de",
-        "member": "package/bin/opencode"
-      },
-      "macos/arm64": {
-        "url": "https://registry.npmjs.org/opencode-darwin-arm64/-/opencode-darwin-arm64-1.18.32.tgz",
-        "bytes": 46028592,
-        "sha256": "sha256:a1707bb6cc9deaccca501c4097f1580b8af70dfc227f194ae0f576f32abbdebe",
-        "member": "package/bin/opencode"
-      },
-      "macos/x86_64": {
-        "url": "https://registry.npmjs.org/opencode-darwin-x64/-/opencode-darwin-x64-1.18.32.tgz",
-        "bytes": 48203499,
-        "sha256": "sha256:e9c0cd81f873cb53b21394461f2b7119bd750329df7221d19642546d3b581386",
-        "member": "package/bin/opencode"
-      },
-      "windows/arm64": {
-        "url": "https://registry.npmjs.org/opencode-windows-arm64/-/opencode-windows-arm64-1.18.32.tgz",
-        "bytes": 58487775,
-        "sha256": "sha256:99ab07bf4e4309fa46d0e44a53a4bfffb72bde3e6be819d62cd2da106da5f625",
-        "member": "package/bin/opencode.exe"
-      },
-      "windows/x86_64": {
-        "url": "https://registry.npmjs.org/opencode-windows-x64/-/opencode-windows-x64-1.18.32.tgz",
-        "bytes": 60169333,
-        "sha256": "sha256:701f23388207a4d2e2ff46cda46e707474fa01cf2a1a1afa404f045c06e5eaa4",
-        "member": "package/bin/opencode.exe"
-      }
-    },
-    "version": "1.18.32",
-    "verified_at": "2026-09-27T07:42:17+00:00"
   },
   "source_verified_runtime_flags_note": "All five read out of the 1.18.25 binary on 2026-08-31 -- the whole `OPENCODE_*` set is in its string table, and these are the five this provider has a reason to name. **Nothing in this repository read this block until now.** It is the same shape as the `windows` row that sat under `unsupported` for weeks while this provider installed Windows: a true-when-written list with no reader, which is the condition a stale fact needs. `native_declaration_names_the_switch_it_sets` now ties `updates_off_env` to this list, so the declaration and the measurement cannot drift apart in silence.",
   "surface_presence": {
