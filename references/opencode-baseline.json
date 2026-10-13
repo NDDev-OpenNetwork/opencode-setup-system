@@ -8,9 +8,9 @@
     "minimum_version_ref": "build/version.json:opencode_min"
   },
   "release": {
-    "github_release": "https://github.com/anomalyco/opencode/releases/tag/v1.18.34",
-    "github_release_api": "https://api.github.com/repos/anomalyco/opencode/releases/tags/v1.18.34",
-    "tag": "v1.18.34",
+    "github_release": "https://github.com/anomalyco/opencode/releases/tag/v1.19.0",
+    "github_release_api": "https://api.github.com/repos/anomalyco/opencode/releases/tags/v1.19.0",
+    "tag": "v1.19.0",
     "cli_signature": null,
     "cli_signature_note": "Official CLI zip/tar assets expose GitHub release asset SHA-256 digests but no PGP/cosign signature was published for the CLI assets."
   },
@@ -43,7 +43,7 @@
       "opencode-linux-x64": "identical",
       "opencode-windows-x64": "signature-only"
     },
-    "x64_baseline_builds_note": "The vendor publishes a `-baseline` package beside each x64 build, for CPUs without AVX2, and its own launcher tries them as a fallback list and keeps whichever answers `--version`. This provider selects one package per platform and never falls back, so a review filed every non-AVX2 x64 host as incorrectly covered. Measured 2026-08-31 against the 1.18.25 packages, by comparing the program inside each pair rather than the tarballs: there is no second build. Linux and macOS are byte-identical to their `-baseline` siblings, and the Windows pair differs in 1694 bytes of 179MB -- an Authenticode countersignature three seconds later and the header fields signing rewrites -- with the same size and the same AVX2 instruction counts. So the finding is empty at this pin, and empty is a property of this release rather than of the design: the pin refresher now compares the pair at every refresh and says so when they stop matching, which is the point at which the host scope would need a CPU dimension. The distinction the vendor keeps the names for is the fallback list, not a second program. Measured 2026-10-03 at 1.18.34: the darwin pair is no longer byte-identical but still the same program -- 1157 differing bytes, all inside LC_CODE_SIGNATURE (dataoff 149997120, datasize 1191312), a Mach-O resignature of the kind the Windows pair already shows. The comparator had to learn the format to say so: it once read PE signatures only and filed this pair as `diverged` on every refresh until it was taught the load-command walk, which is why `signature-only` is now a darwin verdict and not just a Windows one.",
+    "x64_baseline_builds_note": "The vendor publishes a `-baseline` package beside each x64 build, for CPUs without AVX2, and its own launcher tries them as a fallback list and keeps whichever answers `--version`. This provider selects one package per platform and never falls back, so a review filed every non-AVX2 x64 host as incorrectly covered. Measured 2026-08-31 against the 1.18.25 packages, by comparing the program inside each pair rather than the tarballs: there is no second build. Linux and macOS are byte-identical to their `-baseline` siblings, and the Windows pair differs in 1694 bytes of 179MB -- an Authenticode countersignature three seconds later and the header fields signing rewrites -- with the same size and the same AVX2 instruction counts. So the finding is empty at this pin, and empty is a property of this release rather than of the design: the pin refresher now compares the pair at every refresh and says so when they stop matching, which is the point at which the host scope would need a CPU dimension. The distinction the vendor keeps the names for is the fallback list, not a second program. Measured 2026-10-03 at 1.18.34: the darwin pair is no longer byte-identical but still the same program -- 1157 differing bytes, all inside LC_CODE_SIGNATURE (dataoff 149997120, datasize 1191312), a Mach-O resignature of the kind the Windows pair already shows. The comparator had to learn the format to say so: it once read PE signatures only and filed this pair as `diverged` on every refresh until it was taught the load-command walk, which is why `signature-only` is now a darwin verdict and not just a Windows one. Measured 2026-10-13 at 1.19.0: the linux pair is byte-identical, the darwin pair differs in 4330 bytes all inside LC_CODE_SIGNATURE (dataoff 150111808, datasize 1192208), and the windows pair differs in 551 bytes -- 549 inside the certificate table and the two-byte PE CheckSum that any signing rewrite moves. Verdicts unchanged.",
     "musl_precondition": "**The vendor publishes musl builds and this provider declares `linux-musl` unsupported, and the reason is not the vendor's.** Measured 2026-08-31: `opencode-linux-x64-musl` and `opencode-linux-arm64-musl` exist and differ from their glibc siblings in bytes, so they are real second builds rather than names -- unlike the `-baseline` pairs recorded above.\n\nWhat blocks the row is this provider's own release matrix: six targets, `{x86_64,aarch64}-unknown-linux-gnu`, `{x86_64,aarch64}-apple-darwin` and `{x86_64,aarch64}-pc-windows-msvc`, and no musl one. A musl artifact row would name a host on which the executable that installs it cannot start. **The order is fixed: a musl provider build first, then the artifact rows** -- the reverse is a declaration ahead of a capability, which this estate has shipped once already.\n\nNot verified on this workstation, and the reason is the environment rather than the code: `cargo` resolves from `~/.local/bin` ahead of rustup, so `--target x86_64-unknown-linux-musl` fails with *can't find crate for `std`* even with the target installed for the toolchain this repository fixes. The acceptance test is one line in CI, where no such shadow exists: build the seven providers for `x86_64-unknown-linux-musl`, run `provider-info` on an Alpine image, and only then add the rows."
   },
   "official_sources": {
@@ -121,7 +121,7 @@
     "OPENCODE_DISABLE_PROJECT_CONFIG",
     "OPENCODE_DISABLE_SHARE"
   ],
-  "verified_at": "2026-10-02T22:11:59+00:00",
+  "verified_at": "2026-10-13T18:29:13+00:00",
   "native_surfaces": {
     "verified_at": "2026-08-31",
     "config_home": "~/.config/opencode",
@@ -317,6 +317,51 @@
     "shape": "gzip-tar",
     "platforms": {
       "linux/arm64": {
+        "url": "https://registry.npmjs.org/opencode-linux-arm64/-/opencode-linux-arm64-1.19.0.tgz",
+        "bytes": 60103843,
+        "sha256": "sha256:8481102c5d475013302d2f4766cea02b7390e76e74c146408a8cebe2b7f6778f",
+        "member": "package/bin/opencode"
+      },
+      "linux/x86_64": {
+        "url": "https://registry.npmjs.org/opencode-linux-x64/-/opencode-linux-x64-1.19.0.tgz",
+        "bytes": 60325293,
+        "sha256": "sha256:6ce9b8497f680c152a8d65b78640c0b8840d8b0f344530ea30b6c4b69e5a7282",
+        "member": "package/bin/opencode"
+      },
+      "macos/arm64": {
+        "url": "https://registry.npmjs.org/opencode-darwin-arm64/-/opencode-darwin-arm64-1.19.0.tgz",
+        "bytes": 45290684,
+        "sha256": "sha256:2fccf11218322be8de2d09ee0bf7d7fc2a90faeb3a7828991cc0e13273cc0b85",
+        "member": "package/bin/opencode"
+      },
+      "macos/x86_64": {
+        "url": "https://registry.npmjs.org/opencode-darwin-x64/-/opencode-darwin-x64-1.19.0.tgz",
+        "bytes": 48899014,
+        "sha256": "sha256:858048a287cc3deab0b5630fbd756578156d31504c2daae7038ea62d99ebdc3d",
+        "member": "package/bin/opencode"
+      },
+      "windows/arm64": {
+        "url": "https://registry.npmjs.org/opencode-windows-arm64/-/opencode-windows-arm64-1.19.0.tgz",
+        "bytes": 58554722,
+        "sha256": "sha256:3da4c4076924f930b5bfcfc76819ebc9a964ada2436a4abafc63652c1568c93e",
+        "member": "package/bin/opencode.exe"
+      },
+      "windows/x86_64": {
+        "url": "https://registry.npmjs.org/opencode-windows-x64/-/opencode-windows-x64-1.19.0.tgz",
+        "bytes": 60241178,
+        "sha256": "sha256:1d484abbde6ee3db4b0a34a22e469824410d0e274b92856f428673e7d915adb1",
+        "member": "package/bin/opencode.exe"
+      }
+    },
+    "version": "1.19.0",
+    "verified_at": "2026-10-13T18:29:13+00:00"
+  },
+  "setup_catalogue_digest": "sha256:7af5d88d0f5d51510d0b496fa95e84cc27b308be0fdbd3e3a1efca30eaac7e2c",
+  "previous_software_artifacts": {
+    "command": "opencode",
+    "shape": "gzip-tar",
+    "platforms": {
+      "linux/arm64": {
         "url": "https://registry.npmjs.org/opencode-linux-arm64/-/opencode-linux-arm64-1.18.34.tgz",
         "bytes": 60094599,
         "sha256": "sha256:6f212b830b26bf72012f1665559ddb5fd7e928294971d3d1c99a0f9097a3d311",
@@ -355,51 +400,6 @@
     },
     "version": "1.18.34",
     "verified_at": "2026-10-02T22:11:59+00:00"
-  },
-  "setup_catalogue_digest": "sha256:7af5d88d0f5d51510d0b496fa95e84cc27b308be0fdbd3e3a1efca30eaac7e2c",
-  "previous_software_artifacts": {
-    "command": "opencode",
-    "shape": "gzip-tar",
-    "platforms": {
-      "linux/arm64": {
-        "url": "https://registry.npmjs.org/opencode-linux-arm64/-/opencode-linux-arm64-1.18.33.tgz",
-        "bytes": 60060899,
-        "sha256": "sha256:196d0caf1c0553fcd12ef15ff14439ea7e6bc7a4e87ea5238bcb57bbe6e54b93",
-        "member": "package/bin/opencode"
-      },
-      "linux/x86_64": {
-        "url": "https://registry.npmjs.org/opencode-linux-x64/-/opencode-linux-x64-1.18.33.tgz",
-        "bytes": 60275143,
-        "sha256": "sha256:149a676b59224b196626abda2fdbd34c8329ac326b57c4891ba3de446f3ca3c1",
-        "member": "package/bin/opencode"
-      },
-      "macos/arm64": {
-        "url": "https://registry.npmjs.org/opencode-darwin-arm64/-/opencode-darwin-arm64-1.18.33.tgz",
-        "bytes": 46045337,
-        "sha256": "sha256:cd2c704ad653137b62992bca2b32383f8daa31b3c9462e566278e1efba07b31d",
-        "member": "package/bin/opencode"
-      },
-      "macos/x86_64": {
-        "url": "https://registry.npmjs.org/opencode-darwin-x64/-/opencode-darwin-x64-1.18.33.tgz",
-        "bytes": 48221422,
-        "sha256": "sha256:e23cf36d4db46214dbf947b7b78bac63d2f0a9e6e987c5d6e47c573d8bb6ff32",
-        "member": "package/bin/opencode"
-      },
-      "windows/arm64": {
-        "url": "https://registry.npmjs.org/opencode-windows-arm64/-/opencode-windows-arm64-1.18.33.tgz",
-        "bytes": 58509317,
-        "sha256": "sha256:20853b3b92e9dc3e9cf9f5867e0f5d0d50506655788e508397e4680271f9ce85",
-        "member": "package/bin/opencode.exe"
-      },
-      "windows/x86_64": {
-        "url": "https://registry.npmjs.org/opencode-windows-x64/-/opencode-windows-x64-1.18.33.tgz",
-        "bytes": 60196031,
-        "sha256": "sha256:fc76bd4a0f258027594f6a8900e220fd06f7345cb5e67f73dc3b4f53ba3f580e",
-        "member": "package/bin/opencode.exe"
-      }
-    },
-    "version": "1.18.33",
-    "verified_at": "2026-09-30T07:07:53+00:00"
   },
   "source_verified_runtime_flags_note": "All five read out of the 1.18.25 binary on 2026-08-31 -- the whole `OPENCODE_*` set is in its string table, and these are the five this provider has a reason to name. **Nothing in this repository read this block until now.** It is the same shape as the `windows` row that sat under `unsupported` for weeks while this provider installed Windows: a true-when-written list with no reader, which is the condition a stale fact needs. `native_declaration_names_the_switch_it_sets` now ties `updates_off_env` to this list, so the declaration and the measurement cannot drift apart in silence.",
   "surface_presence": {
