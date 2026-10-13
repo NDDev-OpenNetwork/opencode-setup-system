@@ -12,9 +12,9 @@
 #   sh install.sh 0.1.0        # a specific release
 set -eu
 
-REPO="NDDev-OpenNetwork/opencode-setup-system"
+REPO="NDDev-Technocracy-OpenNetwork/opencode-setup-system"
 BINARY="opencode-setup-system"
-VERSION="${1:-0.0.93}"
+VERSION="${1:-0.0.94}"
 PREFIX="${OPENCODE_INSTALL_DIR:-$HOME/.local/bin}"
 
 case "$(uname -s)" in

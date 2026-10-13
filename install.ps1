@@ -7,12 +7,12 @@
 #   powershell -ExecutionPolicy Bypass -File install.ps1 -Version 0.1.0
 [CmdletBinding()]
 param(
-  [string]$Version = "0.0.93",
+  [string]$Version = "0.0.94",
   [string]$InstallDir = $(if ($env:OPENCODE_INSTALL_DIR) { $env:OPENCODE_INSTALL_DIR } else { "$env:LOCALAPPDATA\Programs\opencode-setup-system" })
 )
 $ErrorActionPreference = "Stop"
 
-$repo   = "NDDev-OpenNetwork/opencode-setup-system"
+$repo   = "NDDev-Technocracy-OpenNetwork/opencode-setup-system"
 $binary = "opencode-setup-system"
 $arch   = switch ($env:PROCESSOR_ARCHITECTURE) {
   "AMD64" { "x86_64" }
