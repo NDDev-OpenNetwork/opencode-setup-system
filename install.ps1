@@ -12,7 +12,7 @@ param(
 )
 $ErrorActionPreference = "Stop"
 
-$repo   = "NDDev-Technocracy-OpenNetwork/opencode-setup-system"
+$repo   = "NDDev-Technocracy-Archive/opencode-setup-system"
 $binary = "opencode-setup-system"
 $arch   = switch ($env:PROCESSOR_ARCHITECTURE) {
   "AMD64" { "x86_64" }
